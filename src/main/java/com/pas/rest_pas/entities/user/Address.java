@@ -7,7 +7,14 @@ public class Address {
     private String city;
     private String street;
     private String number;
-    private String code;
+    private String postalCode;
+
+    public Address( String city, String street, String number, String postalCode ) {
+        this.city = city;
+        this.street = street;
+        this.number = number;
+        this.postalCode = postalCode;
+    }
 
     public Address( String city, String street, String number ) {
         this.city = city;
@@ -39,5 +46,34 @@ public class Address {
         this.number = number;
     }
 
+    public String getPostalCode() {
+        return postalCode;
+    }
 
+    public void setPostalCode( String postalCode ) {
+        this.postalCode = postalCode;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if( this == o ) return true;
+        if( !(o instanceof Address) ) return false;
+        Address address = (Address) o;
+        return Objects.equals(city, address.city) && Objects.equals(street, address.street) && Objects.equals(number, address.number) && Objects.equals(postalCode, address.postalCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(city, street, number, postalCode);
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", number='" + number + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                '}';
+    }
 }
