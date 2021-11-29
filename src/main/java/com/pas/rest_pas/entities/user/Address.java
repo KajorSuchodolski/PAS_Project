@@ -9,7 +9,7 @@ public class Address {
     private String number;
     private String code;
 
-    public Address( String city, String street, String number ) {
+    public Address(String city, String street, String number) {
         this.city = city;
         this.street = street;
         this.number = number;
