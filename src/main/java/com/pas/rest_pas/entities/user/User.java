@@ -4,25 +4,43 @@ import com.pas.rest_pas.entities.Entity;
 import com.pas.rest_pas.entities.access_levels.AccessLevel;
 
 import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
 
 public class User extends Entity {
 
     private boolean isActive = true;
+
     private AccessLevel accessLevel;
+
+
     private String firstName;
+
     private String lastName;
+
     private String Address;
-    private String phoneNumber;
+
+    @Min(value = 9, message = "Phone number should not be less than 9!")
+    @Max(value = 9, message = "Phone number should not be greater than 9!")
+    private int phoneNumber;
+
     private String login;
+
+    @Email(message = "Email is invalid!")
+    private String email;
+
     private String password;
 
-    public User( AccessLevel accessLevel, String firstName, String lastName, String phoneNumber, String login, String password ) {
+    public User( AccessLevel accessLevel, String firstName, String lastName, int phoneNumber, String login, String password, String email ) {
         this.accessLevel = accessLevel;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.login = login;
         this.password = password;
+        this.email = email;
     }
 
     public boolean isActive() {
@@ -65,11 +83,11 @@ public class User extends Entity {
         Address = address;
     }
 
-    public String getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber( String phoneNumber ) {
+    public void setPhoneNumber( int phoneNumber ) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -88,6 +106,14 @@ public class User extends Entity {
 
     public void setPassword( String password ) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail( String email ) {
+        this.email = email;
     }
 
     @Override

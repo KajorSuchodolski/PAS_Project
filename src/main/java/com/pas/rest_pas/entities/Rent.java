@@ -2,14 +2,88 @@ package com.pas.rest_pas.entities;
 
 import com.pas.rest_pas.entities.user.User;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class Rent extends Entity{
 
     private User user;
-
+    private List<Costume> costumes;
     private double price;
-    private String beginTime;
-    private String endTime;
+    private LocalDate beginTime;
+    private LocalDate endTime;
 
+    public Rent( User user, List<Costume> costumes, double price, LocalDate beginTime, LocalDate endTime ) {
+        this.user = user;
+        this.costumes = costumes;
+        this.price = price;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser( User user ) {
+        this.user = user;
+    }
+
+    public List<Costume> getCostumes() {
+        return costumes;
+    }
+
+    public void setCostumes( List<Costume> costumes ) {
+        this.costumes = costumes;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice( double price ) {
+        this.price = price;
+    }
+
+    public LocalDate getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime( LocalDate beginTime ) {
+        this.beginTime = beginTime;
+    }
+
+    public LocalDate getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime( LocalDate endTime ) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if( this == o ) return true;
+        if( !(o instanceof Rent) ) return false;
+        if( !super.equals(o) ) return false;
+        Rent rent = (Rent) o;
+        return Double.compare(rent.price, price) == 0 && Objects.equals(user, rent.user) && Objects.equals(costumes, rent.costumes) && Objects.equals(beginTime, rent.beginTime) && Objects.equals(endTime, rent.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), user, costumes, price, beginTime, endTime);
+    }
+
+    @Override
+    public String toString() {
+        return "Rent{" +
+                "user=" + user +
+                ", costumes=" + costumes +
+                ", price=" + price +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }

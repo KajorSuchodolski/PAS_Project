@@ -1,31 +1,32 @@
 package com.pas.rest_pas.managers;
-import com.pas.rest_pas.dao.UserDao;
-import com.pas.rest_pas.entities.Costume;
+import com.pas.rest_pas.dao.UserRepository;
 import com.pas.rest_pas.entities.user.User;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public class UserManager {
 
-    final private UserDao userDao = new UserDao();
+    private UserRepository userRepository;
 
-    public UserManager() {
+    public UserManager(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public void add(User user) {
-        userDao.add(user);
+    public boolean add(User user) {
+        if (!userRepository.add(user)) return false;
+        return true;
     }
 
-    public void remove(User user) {
-        userDao.remove(user);
+    public User getUserById(UUID id) {
+       return userRepository.getById(id);
     }
 
-    public void get(long id) {
-        userDao.get(id);
+    public User getUserByLogin(String login) {
+        return userRepository.getUserByLogin(login);
     }
 
     public void getAll() {
-        userDao.getAll();
+        userRepository.getAll();
     }
 
 }
