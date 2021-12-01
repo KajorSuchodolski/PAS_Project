@@ -1,28 +1,32 @@
-//package com.pas.rest_pas.managers;
-//
-//import com.pas.rest_pas.dao.CostumeDao;
-//import com.pas.rest_pas.entities.Costume;
-//
-//public class CostumeManager {
-//
-//    final private CostumeDao costumeDao = new CostumeDao();
-//
-//    public CostumeManager() {
+package com.pas.rest_pas.managers;
+import com.pas.rest_pas.dao.CostumeRepository;
+import com.pas.rest_pas.entities.Costume;
+
+import java.util.UUID;
+
+public class CostumeManager {
+
+    private CostumeRepository costumeRepository;
+
+    public CostumeManager(CostumeRepository costumeRepository) {
+        this.costumeRepository = costumeRepository;
+    }
+
+//    public boolean add(Costume costume) {
+//        if (!userRepository.add(user)) return false;
+//        return true;
 //    }
 //
-//    public void add(Costume costume) {
-//        costumeDao.add(costume);
+//    public User getUserById(UUID id) {
+//        return userRepository.getById(id);
 //    }
 //
-//    public void remove(Costume costume) {
-//        costumeDao.delete(costume);
-//    }
-//
-//    public void get(long id) {
-//        costumeDao.get(id);
+//    public User getUserByLogin(String login) {
+//        return userRepository.getUserByLogin(login);
 //    }
 //
 //    public void getAll() {
-//        costumeDao.getAll();
+//        userRepository.getAll();
 //    }
-//}
+
+}

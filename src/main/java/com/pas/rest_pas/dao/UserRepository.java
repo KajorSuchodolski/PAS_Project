@@ -14,21 +14,21 @@ public class UserRepository extends AbstractRepository<User> {
         AccessLevel accessLevel = new AdministatorLevel();
         User userOne = new User(
                 accessLevel,
-                "Jan",
-                "Pawel",
-                333333444,
-                "jp2gmd",
-                "chujkurwa",
-                "jp2@gmd.com");
+                "Chrigel",
+                "Glanzmann",
+                123456789,
+                "chrigel",
+                "1234",
+                "chrigel@gmail.com");
 
         User userTwo = new User(
                 accessLevel,
-                "Jan",
-                "Pedal",
-                336333444,
-                "jpgmd",
-                "chujkurwa",
-                "jp@gmd.com");
+                "Fabienne",
+                "Erni",
+                198765432,
+                "fabi",
+                "9876",
+                "fabi@gmail.com");
 
         getAll().add(userOne);
         getAll().add(userTwo);
