@@ -4,20 +4,20 @@ import java.util.Objects;
 
 public class Costume extends Entity {
 
-    /*
-    *
-    * Napisac przezajebista klase costume (dodac atrybuty potrzebne
-    * do tego)
-    *
-    * */
+    public enum Category {
+        GAME, ANIME, MOVIE, ANIMAL;
+    }
+
     private boolean isRented;
     private int size;
     private String name;
+    private Category category;
 
-    public Costume( boolean isRented, int size, String name ) {
+    public Costume(boolean isRented, int size, String name, Category category) {
         this.isRented = isRented;
         this.size = size;
         this.name = name;
+        this.category = category;
     }
 
     public boolean isRented() {
@@ -42,6 +42,14 @@ public class Costume extends Entity {
 
     public void setName( String name ) {
         this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override

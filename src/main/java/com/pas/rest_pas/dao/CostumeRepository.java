@@ -10,12 +10,14 @@ public class CostumeRepository extends AbstractRepository<Costume> {
         Costume costumeOne = new Costume(
                     false,
                     38,
-                    "Wolf");
+                    "Wolf",
+                    Costume.Category.ANIMAL);
 
         Costume costumeTwo = new Costume(
                     false,
                     40,
-                    "Fox");
+                    "Sailor Moon",
+                    Costume.Category.ANIME);
 
         getAll().add(costumeOne);
         getAll().add(costumeTwo);
@@ -25,6 +27,13 @@ public class CostumeRepository extends AbstractRepository<Costume> {
         return getAll()
                 .stream()
                 .filter(e -> e.getSize() == size)
+                .collect(Collectors.toList());
+    }
+
+    public List<Costume> getCostumesByCategory(Costume.Category category) {
+        return getAll()
+                .stream()
+                .filter(e -> e.getCategory() == category)
                 .collect(Collectors.toList());
     }
 

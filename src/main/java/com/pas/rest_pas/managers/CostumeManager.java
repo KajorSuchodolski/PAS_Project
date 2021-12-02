@@ -3,7 +3,6 @@ import com.pas.rest_pas.dao.CostumeRepository;
 import com.pas.rest_pas.entities.Costume;
 
 import java.util.List;
-import java.util.UUID;
 
 public class CostumeManager {
 
@@ -19,6 +18,10 @@ public class CostumeManager {
 
     public List<Costume> getCostumesBySize(int size) {
         return costumeRepository.getCostumesBySize(size);
+    }
+
+    public List<Costume> getCostumesByCategory(Costume.Category category) {
+        return costumeRepository. getCostumesByCategory(category);
     }
 
     public void getAll() {
