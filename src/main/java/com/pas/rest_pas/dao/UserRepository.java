@@ -5,9 +5,11 @@ import com.pas.rest_pas.entities.access_levels.ManagerLevel;
 import com.pas.rest_pas.entities.access_levels.UserLevel;
 import com.pas.rest_pas.entities.user.User;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 public class UserRepository extends AbstractRepository<User> {
 
     public UserRepository() {
