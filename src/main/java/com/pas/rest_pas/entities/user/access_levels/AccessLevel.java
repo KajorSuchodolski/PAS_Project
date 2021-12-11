@@ -1,4 +1,4 @@
-package com.pas.rest_pas.entities.access_levels;
+package com.pas.rest_pas.entities.user.access_levels;
 
 public abstract class AccessLevel {
 

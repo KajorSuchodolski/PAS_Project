@@ -1,12 +1,9 @@
-package com.pas.rest_pas.dao;
+package com.pas.rest_pas.repositories;
 
 import com.pas.rest_pas.entities.Rent;
 import com.pas.rest_pas.entities.user.User;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

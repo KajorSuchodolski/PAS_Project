@@ -1,4 +1,4 @@
-package com.pas.rest_pas.dao;
+package com.pas.rest_pas.repositories;
 
 import com.pas.rest_pas.entities.Entity;
 
@@ -18,7 +18,7 @@ public abstract class AbstractRepository<T extends Entity> {
     public T getById(UUID id) {
         return repository
                 .stream()
-                .filter(user -> id.equals(user.getId()))
+                .filter(e -> id.equals(e.getId()))
                 .findAny()
                 .orElse(null);
     }
@@ -26,21 +26,6 @@ public abstract class AbstractRepository<T extends Entity> {
     public List<T> getAll() {
         return new ArrayList<>(repository);
     }
-
-
-    // U
-    public boolean update(T t, UUID id) {
-        T obj = getById(id);
-        if (!obj.equals(null)) {
-            repository.remove(obj);
-            t.setId(id);
-            repository.add(t);
-            return true;
-        }
-        else return false;
-
-    }
-
 
     // D
     public boolean delete(T t) {

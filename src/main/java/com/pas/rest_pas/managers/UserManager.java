@@ -1,25 +1,33 @@
 package com.pas.rest_pas.managers;
-import com.pas.rest_pas.dao.UserRepository;
+import com.pas.rest_pas.repositories.UserRepository;
 import com.pas.rest_pas.entities.user.User;
+import com.pas.rest_pas.exceptions.UserAdditionException;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 
-@ApplicationScoped
-public class UserManager {
+
+public class UserManager  {
 
     private UserRepository userRepository;
 
     @Inject
-    public UserManager(UserRepository userRepository) {
+    public void setUserRepository( UserRepository userRepository ) {
         this.userRepository = userRepository;
     }
 
-    public boolean add(User user) {
-        if (!userRepository.add(user)) return false;
-        return true;
+    public UserRepository getUserRepository() {
+        return userRepository;
     }
+
+    // C
+
+    public void addUser(User user) throws UserAdditionException {
+        userRepository.addUser(user);
+    }
+
+    // R
 
     public User getUserById(UUID id) {
        return userRepository.getById(id);
@@ -29,8 +37,29 @@ public class UserManager {
         return userRepository.getUserByLogin(login);
     }
 
-    public void getAll() {
-        userRepository.getAll();
+    public List<User> getAll() {
+       return userRepository.getAll();
     }
+
+    public List<User> searchUsersByLogin(String login) {
+        return userRepository.searchUsersByLogin(login);
+    }
+
+    // U
+
+    public void updateUser(User user) {
+        userRepository.updateUser(user);
+
+    }
+
+    public void activateUser(String login) {
+        userRepository.getUserByLogin(login).setActive(true);
+    }
+
+    public void deactivateUser(String login) {
+        userRepository.getUserByLogin(login).setActive(false);
+    }
+
+
 
 }

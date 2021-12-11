@@ -1,13 +1,10 @@
 package com.pas.rest_pas.entities.user;
 
 import com.pas.rest_pas.entities.Entity;
-import com.pas.rest_pas.entities.access_levels.AccessLevel;
+import com.pas.rest_pas.entities.user.access_levels.AccessLevel;
 
 import java.util.Objects;
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Max;
+
 
 public class User extends Entity {
 
@@ -15,32 +12,28 @@ public class User extends Entity {
 
     private AccessLevel accessLevel;
 
-
     private String firstName;
 
     private String lastName;
 
-    private String Address;
-
-    @Min(value = 9, message = "Phone number should not be less than 9!")
-    @Max(value = 9, message = "Phone number should not be greater than 9!")
-    private int phoneNumber;
+    private Address address;
 
     private String login;
 
-    @Email(message = "Email is invalid!")
     private String email;
 
     private String password;
 
-    public User( AccessLevel accessLevel, String firstName, String lastName, int phoneNumber, String login, String password, String email ) {
-        this.accessLevel = accessLevel;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+    public User() {
+
+    }
+
+    public User(String firstName, String lastName, String login, String password, String email) {
+
         this.login = login;
         this.password = password;
         this.email = email;
+
     }
 
     public boolean isActive() {
@@ -75,20 +68,12 @@ public class User extends Entity {
         this.lastName = lastName;
     }
 
-    public String getAddress() {
-        return Address;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddress( String address ) {
-        Address = address;
-    }
-
-    public int getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber( int phoneNumber ) {
-        this.phoneNumber = phoneNumber;
+    public void setAddress( Address address ) {
+        this.address = address;
     }
 
     public String getLogin() {
@@ -99,7 +84,6 @@ public class User extends Entity {
         this.login = login;
     }
 
-    // UMMM wtf ?!
     public String getPassword() {
         return password;
     }
@@ -122,12 +106,12 @@ public class User extends Entity {
         if( !(o instanceof User) ) return false;
         if( !super.equals(o) ) return false;
         User user = (User) o;
-        return isActive == user.isActive && Objects.equals(accessLevel, user.accessLevel) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(Address, user.Address) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(login, user.login) && Objects.equals(password, user.password);
+        return isActive == user.isActive && Objects.equals(accessLevel, user.accessLevel) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(address, user.address) && Objects.equals(login, user.login) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), isActive, accessLevel, firstName, lastName, Address, phoneNumber, login, password);
+        return Objects.hash(super.hashCode(), isActive, accessLevel, firstName, lastName, address, login, email, password);
     }
 
     @Override
@@ -137,9 +121,9 @@ public class User extends Entity {
                 ", accessLevel=" + accessLevel +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", Address='" + Address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address=" + address +
                 ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

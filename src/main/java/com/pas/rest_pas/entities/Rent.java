@@ -1,5 +1,6 @@
 package com.pas.rest_pas.entities;
 
+import com.pas.rest_pas.entities.costume.Costume;
 import com.pas.rest_pas.entities.user.User;
 
 import java.time.LocalDate;
