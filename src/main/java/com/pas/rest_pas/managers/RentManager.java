@@ -1,8 +1,10 @@
 package com.pas.rest_pas.managers;
-import com.pas.rest_pas.dao.RentRepository;
+import com.pas.rest_pas.repositories.RentRepository;
 import com.pas.rest_pas.entities.Rent;
 import com.pas.rest_pas.entities.user.User;
+import com.pas.rest_pas.repositories.UserRepository;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -10,7 +12,8 @@ import java.util.function.Predicate;
 public class RentManager {
     private RentRepository rentRepository;
 
-    public RentManager(RentRepository rentRepository) {
+    @Inject
+    public void setRentRepository(RentRepository rentRepository) {
         this.rentRepository = rentRepository;
     }
 
@@ -26,7 +29,7 @@ public class RentManager {
         return rentRepository.getRentsByDate(predicate);
     }
 
-    public void getAll() {
-        rentRepository.getAll();
+    public List<Rent> getAll() {
+        return rentRepository.getAll();
     }
 }
