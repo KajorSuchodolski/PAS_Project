@@ -2,6 +2,7 @@ package com.pas.rest_pas.entities.user;
 
 import com.pas.rest_pas.entities.Entity;
 import com.pas.rest_pas.entities.user.access_levels.AccessLevel;
+import com.pas.rest_pas.exceptions.EntityCreationException;
 
 import java.util.Objects;
 
@@ -30,6 +31,8 @@ public class User extends Entity {
 
     public User(String firstName, String lastName, String login, String password, String email) {
 
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.login = login;
         this.password = password;
         this.email = email;

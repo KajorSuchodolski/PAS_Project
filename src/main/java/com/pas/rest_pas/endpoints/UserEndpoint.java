@@ -56,23 +56,25 @@ public class UserEndpoint {
 
     // UPDATE
     @PUT
-    @Path("/update")
+    @Path("/update/{login}")
     @Produces("application/text")
-    public String updateUser(User user) {
-        userManager.updateUser(user);
+    public String updateUser(@PathParam("login") String login, User user) {
+        userManager.updateUser(login, user);
         return "User updated successfully";
     }
 
     @PUT
     @Path("/activate/{login}")
-    public void activateUser(@PathParam("login") String login) {
+    public String activateUser(@PathParam("login") String login) {
         userManager.activateUser(login);
+        return "User activated";
     }
 
     @PUT
     @Path("/deactivate/{login}")
-    public void deactivateUser(@PathParam("login") String login) {
+    public String deactivateUser(@PathParam("login") String login) {
         userManager.deactivateUser(login);
+        return "User deactivated";
     }
 
 

@@ -4,6 +4,9 @@ import com.pas.rest_pas.entities.costume.CostumeSize;
 import com.pas.rest_pas.entities.costume.ForWhom;
 import com.pas.rest_pas.exceptions.CostumeByIdNotFound;
 import com.pas.rest_pas.exceptions.CostumeInUseException;
+import com.pas.rest_pas.exceptions.EntityValidationException;
+import com.pas.rest_pas.global_config.Validation;
+import com.pas.rest_pas.global_config.ValidationParameter;
 
 
 import javax.enterprise.context.ApplicationScoped;
@@ -68,13 +71,22 @@ public class CostumeRepository extends AbstractRepository<Costume> {
             throw new CostumeByIdNotFound();
         } else {
 
-            if(!costume.getName().equals("")) {
+            if(costume.getName() != null) {
+                if( Validation.validateData(costume.getName(), ValidationParameter.COSTUME_NAME)) {
+                    throw new EntityValidationException();
+                }
                 getById(costume.getId()).setName(costume.getName());
             }
             if(costume.getCostumeSize() != null) {
+                if( Validation.validateData(costume.getCostumeSize().toString(), ValidationParameter.COSTUME_SIZE)) {
+                    throw new EntityValidationException();
+                }
                 getById(costume.getId()).setCostumeSize(costume.getCostumeSize());
             }
-            if(costume.getForWhom() != null ) {
+            if(costume.getForWhom() != null) {
+                if( Validation.validateData(costume.getForWhom().toString(), ValidationParameter.FOR_WHOM)) {
+                    throw new EntityValidationException();
+                }
                 getById(costume.getId()).setForWhom(costume.getForWhom());
             }
 

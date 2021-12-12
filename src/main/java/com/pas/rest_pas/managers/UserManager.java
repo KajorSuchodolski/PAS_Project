@@ -1,4 +1,7 @@
 package com.pas.rest_pas.managers;
+import com.pas.rest_pas.exceptions.EntityValidationException;
+import com.pas.rest_pas.global_config.Validation;
+import com.pas.rest_pas.global_config.ValidationParameter;
 import com.pas.rest_pas.repositories.UserRepository;
 import com.pas.rest_pas.entities.user.User;
 import com.pas.rest_pas.exceptions.UserAdditionException;
@@ -47,17 +50,17 @@ public class UserManager  {
 
     // U
 
-    public void updateUser(User user) {
-        userRepository.updateUser(user);
+    public void updateUser(String login, User user) {
+        userRepository.updateUser(login, user);
 
     }
 
     public void activateUser(String login) {
-        userRepository.getUserByLogin(login).setActive(true);
+        userRepository.activateUser(login);
     }
 
     public void deactivateUser(String login) {
-        userRepository.getUserByLogin(login).setActive(false);
+        userRepository.deactivateUser(login);
     }
 
 

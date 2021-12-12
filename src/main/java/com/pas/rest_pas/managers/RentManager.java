@@ -1,5 +1,5 @@
 package com.pas.rest_pas.managers;
-import com.pas.rest_pas.dao.RentRepository;
+import com.pas.rest_pas.repositories.RentRepository;
 import com.pas.rest_pas.entities.Rent;
 import com.pas.rest_pas.entities.user.User;
 

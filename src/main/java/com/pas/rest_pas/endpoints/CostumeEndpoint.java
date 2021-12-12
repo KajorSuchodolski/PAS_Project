@@ -87,6 +87,16 @@ public class CostumeEndpoint {
         return "Rent deactivated!";
     }
 
+    // DELETE
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces("application/text")
+    public String removeRent(@PathParam("id") String id) {
+        costumeManager.removeCostume(UUID.fromString(id));
+        return "Rent removed!";
+    }
+
+
 
 
 }
