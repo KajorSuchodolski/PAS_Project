@@ -7,6 +7,7 @@ import com.pas.rest_pas.managers.UserManager;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,31 +51,40 @@ public class UserEndpoint {
     @POST
     @Path("/add")
     @Consumes("application/json")
-    public void addUser( User user) throws UserAdditionException {
+    public Response addUser( User user) throws UserAdditionException {
         userManager.addUser(user);
+        return Response.ok(Response.Status.OK)
+                .entity("User has been added")
+                .build();
     }
 
     // UPDATE
     @PUT
     @Path("/update/{login}")
     @Produces("application/text")
-    public String updateUser(@PathParam("login") String login, User user) {
+    public Response updateUser(@PathParam("login") String login, User user) {
         userManager.updateUser(login, user);
-        return "User updated successfully";
+        return Response.ok(Response.Status.OK)
+                .entity("User updated successfully")
+                .build();
     }
 
     @PUT
     @Path("/activate/{login}")
-    public String activateUser(@PathParam("login") String login) {
+    public Response activateUser(@PathParam("login") String login) {
         userManager.activateUser(login);
-        return "User activated";
+        return Response.ok(Response.Status.OK)
+                .entity("User activated")
+                .build();
     }
 
     @PUT
     @Path("/deactivate/{login}")
-    public String deactivateUser(@PathParam("login") String login) {
+    public Response deactivateUser(@PathParam("login") String login) {
         userManager.deactivateUser(login);
-        return "User deactivated";
+        return Response.ok(Response.Status.OK)
+                .entity("User deactivated")
+                .build();
     }
 
 
