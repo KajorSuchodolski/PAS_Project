@@ -74,10 +74,25 @@ public class UserRepository extends AbstractRepository<User> {
     }
 
     public void addUser(User user) throws UserAdditionException {
+        if(user.getLogin() == null
+                || user.getEmail() == null
+                || user.getPassword() == null
+                || user.getFirstName() == null
+                || user.getLastName() == null) {
+            throw new UserAdditionException();
+        }
+
         if(getUserByLogin(user.getLogin()) != null) {
             throw new UserAdditionException();
         }
         if(getUserByEmail(user.getEmail()) != null) {
+            throw new UserAdditionException();
+        }
+        if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME)
+        || Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME)
+        || Validation.validateData(user.getLogin(), ValidationParameter.LOGIN)
+        || Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD)
+                || Validation.validateData(user.getEmail(), ValidationParameter.EMAIL)) {
             throw new UserAdditionException();
         }
         add(user);
@@ -88,31 +103,31 @@ public class UserRepository extends AbstractRepository<User> {
             throw new UserUpdateException();
         } else {
             if(user.getFirstName() != null) {
-                if( Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME) ) {
+                if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME) ) {
                     throw new EntityValidationException();
                 }
                 getUserByLogin(login).setFirstName(user.getFirstName());
             }
             if(user.getLastName() != null) {
-                if( Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME) ) {
+                if(Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME) ) {
                     throw new EntityValidationException();
                 }
                 getUserByLogin(login).setLastName(user.getLastName());
             }
             if(user.getLogin() != null) {
-                if( Validation.validateData(user.getLogin(), ValidationParameter.LOGIN) ) {
+                if(Validation.validateData(user.getLogin(), ValidationParameter.LOGIN) ) {
                     throw new EntityValidationException();
                 }
                 getUserByLogin(login).setLogin(user.getLogin());
             }
             if(user.getPassword() != null) {
-                if( Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD) ) {
+                if(Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD) ) {
                     throw new EntityValidationException();
                 }
                 getUserByLogin(login).setPassword(user.getPassword());
             }
             if(user.getEmail() != null) {
-                if( Validation.validateData(user.getEmail(), ValidationParameter.EMAIL) ) {
+                if(Validation.validateData(user.getEmail(), ValidationParameter.EMAIL) ) {
                     throw new EntityValidationException();
                 }
                 getUserByLogin(login).setEmail(user.getEmail());

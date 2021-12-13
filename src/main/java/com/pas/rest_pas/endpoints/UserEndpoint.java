@@ -51,7 +51,7 @@ public class UserEndpoint {
     @POST
     @Path("/add")
     @Consumes("application/json")
-    public Response addUser( User user) throws UserAdditionException {
+    public Response addUser( User user) {
         userManager.addUser(user);
         return Response.ok(Response.Status.OK)
                 .entity("User has been added")
