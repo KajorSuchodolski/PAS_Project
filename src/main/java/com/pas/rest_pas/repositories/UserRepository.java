@@ -1,5 +1,5 @@
 package com.pas.rest_pas.repositories;
-import com.pas.rest_pas.exceptions.UserUpdateException;
+import com.pas.rest_pas.exceptions.UserByLoginNotFound;
 import com.pas.rest_pas.entities.user.User;
 import com.pas.rest_pas.exceptions.UserAdditionException;
 
@@ -76,13 +76,12 @@ public class UserRepository extends AbstractRepository<User> {
             throw new UserAdditionException();
         }
         add(user);
-
     }
 
-    public void updateUser(User user) throws UserUpdateException {
+    public void updateUser(User user) throws UserByLoginNotFound {
 
         if(getUserByLogin(user.getLogin()) == null) {
-            throw new UserUpdateException();
+            throw new UserByLoginNotFound();
         } else {
 
             if( !user.getFirstName().equals("") ) {
@@ -102,6 +101,5 @@ public class UserRepository extends AbstractRepository<User> {
             }
 
         }
-
     }
 }

@@ -16,7 +16,6 @@ public class UserEndpoint {
     @Inject
     private UserManager userManager;
 
-
     // READ
     @GET
     @Path("/all")
@@ -50,7 +49,7 @@ public class UserEndpoint {
     @POST
     @Path("/add")
     @Consumes("application/json")
-    public void addUser( User user) throws UserAdditionException {
+    public void addUser(User user) throws UserAdditionException {
         userManager.addUser(user);
     }
 
@@ -74,8 +73,5 @@ public class UserEndpoint {
     public void deactivateUser(@PathParam("login") String login) {
         userManager.deactivateUser(login);
     }
-
-
-
 
 }
