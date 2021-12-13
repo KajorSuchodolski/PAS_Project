@@ -68,8 +68,9 @@ public class CostumeEndpoint {
 
     @PUT
     @Path("/update/{id}")
+    @Consumes("application/json")
     public Response updateCostume(@PathParam("id") String id, Costume costume) throws CostumeByIdNotFound {
-        costumeManager.updateCostume(UUID.fromString("id"), costume);
+        costumeManager.updateCostume(UUID.fromString(id), costume);
         return Response.ok(Response.Status.OK)
                 .entity("Costume updated successfully")
                 .build();

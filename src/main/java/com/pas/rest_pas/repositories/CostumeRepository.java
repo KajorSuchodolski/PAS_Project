@@ -123,19 +123,25 @@ public class CostumeRepository extends AbstractRepository<Costume> {
                 if( Validation.validateData(costume.getName(), ValidationParameter.COSTUME_NAME)) {
                     throw new EntityValidationException();
                 }
-                getById(costume.getId()).setName(costume.getName());
+                getById(id).setName(costume.getName());
             }
             if(costume.getCostumeSize() != null) {
-                if( Validation.validateData(costume.getCostumeSize().toString(), ValidationParameter.COSTUME_SIZE)) {
+                if( !Validation.validateData(costume.getCostumeSize().toString(), ValidationParameter.COSTUME_SIZE)) {
                     throw new EntityValidationException();
                 }
-                getById(costume.getId()).setCostumeSize(costume.getCostumeSize());
+                getById(id).setCostumeSize(costume.getCostumeSize());
             }
             if(costume.getForWhom() != null) {
-                if( Validation.validateData(costume.getForWhom().toString(), ValidationParameter.FOR_WHOM)) {
+                if( !Validation.validateData(costume.getForWhom().toString(), ValidationParameter.FOR_WHOM)) {
                     throw new EntityValidationException();
                 }
-                getById(costume.getId()).setForWhom(costume.getForWhom());
+                getById(id).setForWhom(costume.getForWhom());
+            }
+            if(costume.getPrice() < 999999999) {
+                if( !Validation.validateData(Double.toString(costume.getPrice()), ValidationParameter.PRICE)) {
+                    throw new EntityValidationException();
+                }
+                getById(id).setPrice(costume.getPrice());
             }
 
 
