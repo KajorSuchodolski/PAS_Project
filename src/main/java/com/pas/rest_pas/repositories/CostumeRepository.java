@@ -4,6 +4,9 @@ import com.pas.rest_pas.entities.costume.CostumeSize;
 import com.pas.rest_pas.entities.costume.ForWhom;
 import com.pas.rest_pas.exceptions.CostumeByIdNotFound;
 import com.pas.rest_pas.exceptions.CostumeInUseException;
+import com.pas.rest_pas.exceptions.EntityValidationException;
+import com.pas.rest_pas.global_config.Validation;
+import com.pas.rest_pas.global_config.ValidationParameter;
 
 
 import javax.enterprise.context.ApplicationScoped;
@@ -15,9 +18,47 @@ import java.util.stream.Collectors;
 public class CostumeRepository extends AbstractRepository<Costume> {
 
 
+    public CostumeRepository() {
+        Costume costume1 = new Costume(
+                "Furry Costume",
+                CostumeSize.XL,
+                ForWhom.BOYS
+        );
+        Costume costume2 = new Costume(
+                "Furry Costume",
+                CostumeSize.XL,
+                ForWhom.GIRLS
+        );
+        Costume costume3 = new Costume(
+                "Pope",
+                CostumeSize.XXL,
+                ForWhom.MAN
+        );
+        Costume costume4 = new Costume(
+                "Amogus Red Impostor",
+                CostumeSize.S,
+                ForWhom.BOYS
+        );
+        Costume costume5 = new Costume(
+                "Zorro",
+                CostumeSize.XL,
+                ForWhom.GIRLS
+        );
+        addCostume(costume1);
+        addCostume(costume2);
+        addCostume(costume3);
+        addCostume(costume4);
+        addCostume(costume5);
+    }
+
     // READ
     public List<Costume> getAllCostumesByAge(String age) {
-        ForWhom forWhom = ForWhom.valueOf(age);
+        ForWhom forWhom;
+        try {
+            forWhom = ForWhom.valueOf(age);
+        } catch(IllegalArgumentException e) {
+            throw new EntityValidationException();
+        }
         return getAll()
                 .stream()
                 .filter(e -> e.getForWhom().equals(forWhom))
@@ -25,8 +66,14 @@ public class CostumeRepository extends AbstractRepository<Costume> {
     }
 
     public List<Costume> getAllCostumesByParams(String age, String size) {
-        CostumeSize costumeSize = CostumeSize.valueOf(size);
-        ForWhom forWhom = ForWhom.valueOf(age);
+        CostumeSize costumeSize;
+        ForWhom forWhom;
+        try {
+           costumeSize = CostumeSize.valueOf(size);
+           forWhom = ForWhom.valueOf(age);
+        } catch(IllegalArgumentException e) {
+            throw new EntityValidationException();
+        }
         return getAll()
                 .stream()
                 .filter(e -> e.getCostumeSize().equals(costumeSize) && e.getForWhom().equals(forWhom))
@@ -68,13 +115,22 @@ public class CostumeRepository extends AbstractRepository<Costume> {
             throw new CostumeByIdNotFound();
         } else {
 
-            if(!costume.getName().equals("")) {
+            if(costume.getName() != null) {
+                if( Validation.validateData(costume.getName(), ValidationParameter.COSTUME_NAME)) {
+                    throw new EntityValidationException();
+                }
                 getById(costume.getId()).setName(costume.getName());
             }
             if(costume.getCostumeSize() != null) {
+                if( Validation.validateData(costume.getCostumeSize().toString(), ValidationParameter.COSTUME_SIZE)) {
+                    throw new EntityValidationException();
+                }
                 getById(costume.getId()).setCostumeSize(costume.getCostumeSize());
             }
-            if(costume.getForWhom() != null ) {
+            if(costume.getForWhom() != null) {
+                if( Validation.validateData(costume.getForWhom().toString(), ValidationParameter.FOR_WHOM)) {
+                    throw new EntityValidationException();
+                }
                 getById(costume.getId()).setForWhom(costume.getForWhom());
             }
 

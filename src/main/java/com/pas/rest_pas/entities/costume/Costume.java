@@ -12,12 +12,15 @@ public class Costume extends Entity {
     private ForWhom forWhom;
     private String name;
 
-    public Costume(String name, CostumeSize costumeSize, ForWhom forWhom) throws AttributeNotFoundException {
-        if(name.equals("")) {
-            throw new AttributeNotFoundException("Name is invalid!");
-        }
+    public Costume() {
+        
+    }
+
+    public Costume(String name, CostumeSize costumeSize, ForWhom forWhom) {
+
         this.isRented = false;
         this.costumeSize = costumeSize;
+        this.forWhom = forWhom;
         this.name = name;
     }
 
@@ -26,7 +29,7 @@ public class Costume extends Entity {
     }
 
     public void setRented( boolean rented ) {
-        isRented = rented;
+        this.isRented = rented;
     }
 
     public CostumeSize getCostumeSize() {

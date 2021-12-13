@@ -1,7 +1,10 @@
 package com.pas.rest_pas.repositories;
+import com.pas.rest_pas.exceptions.EntityValidationException;
 import com.pas.rest_pas.exceptions.UserUpdateException;
 import com.pas.rest_pas.entities.user.User;
 import com.pas.rest_pas.exceptions.UserAdditionException;
+import com.pas.rest_pas.global_config.Validation;
+import com.pas.rest_pas.global_config.ValidationParameter;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
@@ -37,12 +40,14 @@ public class UserRepository extends AbstractRepository<User> {
         addUser(user2);
         addUser(user3);
     }
-    public void activateUser(User user) {
-        getById(user.getId()).setActive(true);
+    public void activateUser(String login) throws UserUpdateException{
+        if(getUserByLogin(login) == null) throw new UserUpdateException();
+        getUserByLogin(login).setActive(true);
     }
 
-    public void deactivateUser(User user) {
-        getById(user.getId()).setActive(false);
+    public void deactivateUser(String login) throws UserUpdateException{
+        if(getUserByLogin(login) == null) throw new UserUpdateException();
+        getUserByLogin(login).setActive(false);
     }
 
     public User getUserByLogin(String login) {
@@ -69,39 +74,64 @@ public class UserRepository extends AbstractRepository<User> {
     }
 
     public void addUser(User user) throws UserAdditionException {
+        if(user.getLogin() == null
+                || user.getEmail() == null
+                || user.getPassword() == null
+                || user.getFirstName() == null
+                || user.getLastName() == null) {
+            throw new UserAdditionException();
+        }
+
         if(getUserByLogin(user.getLogin()) != null) {
             throw new UserAdditionException();
         }
         if(getUserByEmail(user.getEmail()) != null) {
             throw new UserAdditionException();
         }
+        if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME)
+        || Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME)
+        || Validation.validateData(user.getLogin(), ValidationParameter.LOGIN)
+        || Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD)
+                || Validation.validateData(user.getEmail(), ValidationParameter.EMAIL)) {
+            throw new UserAdditionException();
+        }
         add(user);
-
     }
 
-    public void updateUser(User user) throws UserUpdateException {
-
-        if(getUserByLogin(user.getLogin()) == null) {
+    public void updateUser(String login, User user) throws UserUpdateException {
+        if(getUserByLogin(login) == null) {
             throw new UserUpdateException();
         } else {
-
-            if( !user.getFirstName().equals("") ) {
-                getUserByLogin(user.getLogin()).setFirstName(user.getFirstName());
+            if(user.getFirstName() != null) {
+                if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME) ) {
+                    throw new EntityValidationException();
+                }
+                getUserByLogin(login).setFirstName(user.getFirstName());
             }
-            if( !user.getLastName().equals("") ) {
-                getUserByLogin(user.getLogin()).setFirstName(user.getLastName());
+            if(user.getLastName() != null) {
+                if(Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME) ) {
+                    throw new EntityValidationException();
+                }
+                getUserByLogin(login).setLastName(user.getLastName());
             }
-            if( !user.getLogin().equals("") ) {
-                getUserByLogin(user.getLogin()).setFirstName(user.getLogin());
+            if(user.getLogin() != null) {
+                if(Validation.validateData(user.getLogin(), ValidationParameter.LOGIN) ) {
+                    throw new EntityValidationException();
+                }
+                getUserByLogin(login).setLogin(user.getLogin());
             }
-            if( !user.getPassword().equals("") ) {
-                getUserByLogin(user.getLogin()).setFirstName(user.getPassword());
+            if(user.getPassword() != null) {
+                if(Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD) ) {
+                    throw new EntityValidationException();
+                }
+                getUserByLogin(login).setPassword(user.getPassword());
             }
-            if( !user.getEmail().equals("") ) {
-                getUserByLogin(user.getLogin()).setFirstName(user.getEmail());
+            if(user.getEmail() != null) {
+                if(Validation.validateData(user.getEmail(), ValidationParameter.EMAIL) ) {
+                    throw new EntityValidationException();
+                }
+                getUserByLogin(login).setEmail(user.getEmail());
             }
-
         }
-
     }
 }
