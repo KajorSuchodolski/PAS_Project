@@ -57,8 +57,8 @@ public class CostumeManager {
 
     // UPDATE
 
-    public void updateCostume(Costume costume) throws CostumeByIdNotFound {
-        costumeRepository.updateCostume(costume);
+    public void updateCostume(UUID id, Costume costume) throws CostumeByIdNotFound {
+        costumeRepository.updateCostume(id, costume);
     }
 
     public void activateRent(UUID id) {

@@ -113,9 +113,9 @@ public class CostumeRepository extends AbstractRepository<Costume> {
 
     // UPDATE
 
-    public void updateCostume(Costume costume) throws CostumeByIdNotFound {
+    public void updateCostume(UUID id, Costume costume) throws CostumeByIdNotFound {
 
-        if(getById(costume.getId()) == null) {
+        if(getById(id) == null) {
             throw new CostumeByIdNotFound();
         } else {
 

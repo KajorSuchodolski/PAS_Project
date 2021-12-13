@@ -41,12 +41,6 @@ public class RentEndpoint {
         return rentManager.getAll();
     }
 
-    @GET
-    @Path("/getByCusomer/{login}")
-    @Produces("application/json")
-    public List<Rent> getRentsByCustomer(@PathParam("login") String login) throws UserByLoginNotFound {
-        return rentManager.getRentsByCustomer(login);
-    }
 
     @GET
     @Path("/getById/{UUID}")
@@ -63,8 +57,8 @@ public class RentEndpoint {
     }
 
     @PUT
-    @Path("/end/{UUID}")
-    public void endRent(@PathParam("UUID") UUID rentId, @QueryParam("date") String date) throws RentByIdNotFound{
+    @Path("/end")
+    public void endRent(@QueryParam("UUID") UUID rentId, @QueryParam("date") String date) throws RentByIdNotFound{
         rentManager.endRent(date, rentId);
     }
 }

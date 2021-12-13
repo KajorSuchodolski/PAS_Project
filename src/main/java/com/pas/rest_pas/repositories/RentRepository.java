@@ -2,10 +2,7 @@ package com.pas.rest_pas.repositories;
 
 import com.pas.rest_pas.entities.Rent;
 import com.pas.rest_pas.entities.costume.Costume;
-import com.pas.rest_pas.exceptions.CostumeInUseException;
-import com.pas.rest_pas.exceptions.RentByIdNotFound;
-import com.pas.rest_pas.exceptions.UserAdditionException;
-import com.pas.rest_pas.exceptions.UserByLoginNotFound;
+import com.pas.rest_pas.exceptions.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
@@ -39,9 +36,15 @@ public class RentRepository extends AbstractRepository<Rent> {
         } else if (Objects.equals(date, "now")) {
             LocalDate dateRentEnded = LocalDate.now();
             getRentById(rentId).setEndTime(dateRentEnded);
+            for(Costume costume : getRentById(rentId).getCostumes()) {
+                costume.setRented(true);
+            }
         } else {
             LocalDate dateRentEnded = LocalDate.parse(date);
             getRentById(rentId).setEndTime(dateRentEnded);
+            for(Costume costume : getRentById(rentId).getCostumes()) {
+                costume.setRented(true);
+            }
         }
     }
 

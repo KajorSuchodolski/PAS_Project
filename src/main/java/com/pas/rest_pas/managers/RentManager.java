@@ -46,12 +46,16 @@ public class RentManager {
         if (userManager.getUserByLogin(userLogin) == null) {
             throw new UserByLoginNotFound();
         }
+        if (!userManager.getUserByLogin(userLogin).isActive()) {
+            throw new UserInactiveException();
+        }
 
         List<Costume> costumes = new ArrayList<>();
         Iterator<UUID> id = costumeIds.iterator();
+
         double totalPrice = 0;
 
-        while (id.hasNext()) {
+        while(id.hasNext()) {
             Costume currentCostume = costumeManager.getCostumeById(id.next());
             if (currentCostume == null) {
                 throw new CostumeByIdNotFound();
@@ -59,6 +63,7 @@ public class RentManager {
             if (currentCostume.isRented()) {
                 throw new CostumeInUseException();
             }
+            currentCostume.setRented(true);
             costumes.add(currentCostume);
             totalPrice += currentCostume.getPrice();
         }

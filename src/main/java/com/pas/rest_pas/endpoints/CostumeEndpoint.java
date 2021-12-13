@@ -67,10 +67,9 @@ public class CostumeEndpoint {
     // UPDATE
 
     @PUT
-    @Path("/update")
-    @Produces("application/text")
-    public Response updateCostume( Costume costume) throws CostumeByIdNotFound {
-        costumeManager.updateCostume(costume);
+    @Path("/update/{id}")
+    public Response updateCostume(@PathParam("id") String id, Costume costume) throws CostumeByIdNotFound {
+        costumeManager.updateCostume(UUID.fromString("id"), costume);
         return Response.ok(Response.Status.OK)
                 .entity("Costume updated successfully")
                 .build();
@@ -78,7 +77,6 @@ public class CostumeEndpoint {
 
     @PUT
     @Path("/activate/{id}")
-    @Produces("application/text")
     public Response activateRent(@PathParam("id") String id) {
         costumeManager.activateRent(UUID.fromString(id));
         return Response.ok(Response.Status.OK)
@@ -88,7 +86,6 @@ public class CostumeEndpoint {
 
     @PUT
     @Path("/deactivate/{id}")
-    @Produces("application/text")
     public Response  deactivateRent(@PathParam("id") String id) {
         costumeManager.deactivateRent(UUID.fromString(id));
         return Response.ok(Response.Status.OK)
@@ -99,7 +96,6 @@ public class CostumeEndpoint {
     // DELETE
     @DELETE
     @Path("/delete/{id}")
-    @Produces("application/text")
     public Response removeRent(@PathParam("id") String id) {
         costumeManager.removeCostume(UUID.fromString(id));
         return Response.ok(Response.Status.OK)
