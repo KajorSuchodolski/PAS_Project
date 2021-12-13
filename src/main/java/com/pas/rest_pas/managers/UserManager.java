@@ -6,9 +6,11 @@ import com.pas.rest_pas.repositories.UserRepository;
 import com.pas.rest_pas.entities.user.User;
 import com.pas.rest_pas.exceptions.UserAdditionException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
+
 
 
 public class UserManager  {

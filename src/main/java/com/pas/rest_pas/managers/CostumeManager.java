@@ -6,9 +6,11 @@ import com.pas.rest_pas.exceptions.CostumeByIdNotFound;
 import com.pas.rest_pas.exceptions.CostumeInUseException;
 import com.pas.rest_pas.repositories.CostumeRepository;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
+
 
 public class CostumeManager {
 

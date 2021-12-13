@@ -12,6 +12,7 @@ import com.pas.rest_pas.managers.UserManager;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,8 +26,11 @@ public class RentEndpoint {
     @POST
     @Path("/add")
     @Consumes("application/json")
-    public void addRent(@QueryParam("userLogin") String userLogin, @QueryParam("date") String date, List<UUID> costumeIds) throws CostumeInUseException {
+    public Response addRent( @QueryParam("userLogin") String userLogin, @QueryParam("date") String date, List<UUID> costumeIds) throws CostumeInUseException {
         rentManager.addRent(userLogin, costumeIds, date);
+        return Response.ok(Response.Status.OK)
+                .entity("Rent added successfully")
+                .build();
     }
 
     // READ
@@ -52,7 +56,7 @@ public class RentEndpoint {
     }
 
     // DELETE
-    @POST
+    @DELETE
     @Path("/delete/{UUID}")
     public void deleteRent(@PathParam("UUID") UUID rentId) throws RentByIdNotFound {
         rentManager.deleteRentFromRepo(rentId);

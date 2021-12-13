@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class RentManager {
+
     private RentRepository rentRepository;
     private UserManager userManager;
     private CostumeManager costumeManager;

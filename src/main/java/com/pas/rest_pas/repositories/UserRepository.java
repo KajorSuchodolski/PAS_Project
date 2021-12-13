@@ -15,21 +15,21 @@ public class UserRepository extends AbstractRepository<User> {
 
     public UserRepository() throws UserAdditionException {
         User user1 = new User(
-                "Radosław",
+                "Radoslaw",
                 "Zyzik",
                 "KajorSuchodolski",
                 "hehe",
                 "radek2000@onet.pl"
         );
         User user2 = new User(
-                "Radosław",
-                "Hyży",
+                "Radoslaw",
+                "Hyzy",
                 "Radek460",
                 "admin1",
                 "test@upd.pl"
         );
         User user3 = new User(
-                "Radosław",
+                "Radoslaw",
                 "Kowalski",
                 "MrRadek2000",
                 "admin1",

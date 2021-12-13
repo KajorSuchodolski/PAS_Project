@@ -21,7 +21,7 @@ public class RentRepository extends AbstractRepository<Rent> {
     public List<Rent> getRentsByCustomer(String login) {
         return getAll()
                 .stream()
-                .filter(e -> e.getUser().getLogin().equals(login))
+                .filter(e -> Objects.equals(e.getUser().getLogin(), login))
                 .collect(Collectors.toList());
     }
 
