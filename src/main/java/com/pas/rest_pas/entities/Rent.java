@@ -15,12 +15,11 @@ public class Rent extends Entity{
     private LocalDate beginTime;
     private LocalDate endTime;
 
-    public Rent( User user, List<Costume> costumes, double price, LocalDate beginTime, LocalDate endTime ) {
+    public Rent( User user, List<Costume> costumes, double price, LocalDate beginTime) {
         this.user = user;
         this.costumes = costumes;
         this.price = price;
         this.beginTime = beginTime;
-        this.endTime = endTime;
     }
 
     public User getUser() {

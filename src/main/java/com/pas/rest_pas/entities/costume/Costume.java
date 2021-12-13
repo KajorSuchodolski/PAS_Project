@@ -11,17 +11,16 @@ public class Costume extends Entity {
     private CostumeSize costumeSize;
     private ForWhom forWhom;
     private String name;
+    private double price;
 
     public Costume() {
-        
     }
 
-    public Costume(String name, CostumeSize costumeSize, ForWhom forWhom) {
-
+    public Costume(String name, CostumeSize costumeSize, ForWhom forWhom, double price) {
         this.isRented = false;
         this.costumeSize = costumeSize;
-        this.forWhom = forWhom;
         this.name = name;
+        this.price = price;
     }
 
     public boolean isRented() {
@@ -29,7 +28,7 @@ public class Costume extends Entity {
     }
 
     public void setRented( boolean rented ) {
-        this.isRented = rented;
+        isRented = rented;
     }
 
     public CostumeSize getCostumeSize() {
@@ -54,6 +53,14 @@ public class Costume extends Entity {
 
     public void setName( String name ) {
         this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override

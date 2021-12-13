@@ -17,32 +17,36 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CostumeRepository extends AbstractRepository<Costume> {
 
-
     public CostumeRepository() {
         Costume costume1 = new Costume(
                 "Furry Costume",
                 CostumeSize.XL,
-                ForWhom.BOYS
+                ForWhom.BOYS,
+                1000000
         );
         Costume costume2 = new Costume(
                 "Furry Costume",
                 CostumeSize.XL,
-                ForWhom.GIRLS
+                ForWhom.GIRLS,
+                666
         );
         Costume costume3 = new Costume(
                 "Pope",
                 CostumeSize.XXL,
-                ForWhom.MAN
+                ForWhom.MAN,
+                420
         );
         Costume costume4 = new Costume(
                 "Amogus Red Impostor",
                 CostumeSize.S,
-                ForWhom.BOYS
+                ForWhom.BOYS,
+                0.001
         );
         Costume costume5 = new Costume(
                 "Zorro",
                 CostumeSize.XL,
-                ForWhom.GIRLS
+                ForWhom.GIRLS,
+                100
         );
         addCostume(costume1);
         addCostume(costume2);

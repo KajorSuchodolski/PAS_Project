@@ -71,7 +71,4 @@ public class CostumeManager {
     public void removeCostume(UUID id) throws CostumeByIdNotFound, CostumeInUseException {
         costumeRepository.removeCostume(id);
     }
-
-
-
 }
