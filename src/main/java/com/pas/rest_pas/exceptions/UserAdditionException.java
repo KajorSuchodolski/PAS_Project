@@ -4,6 +4,6 @@ import javax.ws.rs.core.Response;
 
 public class UserAdditionException extends WebApplicationException {
     public UserAdditionException() {
-        super("User with given address or login exists!", Response.Status.BAD_REQUEST);
+        super(Response.status(Response.Status.BAD_REQUEST).entity("User with given address or login exists!").build());
     }
 }

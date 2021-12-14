@@ -41,10 +41,12 @@ public class RentRepository extends AbstractRepository<Rent> {
             }
         } else {
             LocalDate dateRentEnded = LocalDate.parse(date);
+            System.out.println(dateRentEnded);
+//            if(dateRentEnded.isBefore(LocalDate.now())) {
+//                throw new DateInPastException();
+//            }
+            if(dateRentEnded.isBefore(LocalDate.now()))
             getRentById(rentId).setEndTime(dateRentEnded);
-            for(Costume costume : getRentById(rentId).getCostumes()) {
-                costume.setRented(true);
-            }
         }
     }
 

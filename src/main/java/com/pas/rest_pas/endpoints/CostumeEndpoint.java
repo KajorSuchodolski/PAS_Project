@@ -25,6 +25,21 @@ public class CostumeEndpoint {
     }
 
     @GET
+    @Path("/getAllRented")
+    @Produces("application/json")
+    public List<Costume> getAllRented() {
+        return costumeManager.getAllByRentStatus(true);
+    }
+
+    @GET
+    @Path("/getAllAvailable")
+    @Produces("application/json")
+    public List<Costume> getAllAvailable() {
+        return costumeManager.getAllByRentStatus(false);
+    }
+
+
+    @GET
     @Path("/getAllByAge/{age}")
     @Produces("application/json")
     public List<Costume> getAllCostumesByAge( @PathParam("age") String age ) {

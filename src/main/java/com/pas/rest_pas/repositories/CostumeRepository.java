@@ -22,25 +22,25 @@ public class CostumeRepository extends AbstractRepository<Costume> {
                 "Furry Costume",
                 CostumeSize.XL,
                 ForWhom.BOYS,
-                1000000
+                100
         );
         Costume costume2 = new Costume(
                 "Furry Costume",
                 CostumeSize.XL,
                 ForWhom.GIRLS,
-                666
+                66
         );
         Costume costume3 = new Costume(
                 "Pope",
                 CostumeSize.XXL,
                 ForWhom.MAN,
-                420
+                42
         );
         Costume costume4 = new Costume(
                 "Amogus Red Impostor",
                 CostumeSize.S,
                 ForWhom.BOYS,
-                0.001
+                10
         );
         Costume costume5 = new Costume(
                 "Zorro",
@@ -56,12 +56,20 @@ public class CostumeRepository extends AbstractRepository<Costume> {
     }
 
     // READ
+
+    public List<Costume> getAllByRentStatus(boolean flag) {
+        return getAll()
+                .stream()
+                .filter(e -> e.isRented() == flag)
+                .collect(Collectors.toList());
+    }
+
     public List<Costume> getAllCostumesByAge(String age) {
         ForWhom forWhom;
         try {
             forWhom = ForWhom.valueOf(age);
         } catch(IllegalArgumentException e) {
-            throw new EntityValidationException();
+            throw new EntityValidationException("Invalid parameter for: ForWhom");
         }
         return getAll()
                 .stream()
@@ -76,7 +84,7 @@ public class CostumeRepository extends AbstractRepository<Costume> {
            costumeSize = CostumeSize.valueOf(size);
            forWhom = ForWhom.valueOf(age);
         } catch(IllegalArgumentException e) {
-            throw new EntityValidationException();
+            throw new EntityValidationException("Invalid parameter for ForWhom or CostumeSize");
         }
         return getAll()
                 .stream()
@@ -121,28 +129,32 @@ public class CostumeRepository extends AbstractRepository<Costume> {
 
             if(costume.getName() != null) {
                 if( Validation.validateData(costume.getName(), ValidationParameter.COSTUME_NAME)) {
-                    throw new EntityValidationException();
+                    throw new EntityValidationException("Costume name is invalid");
                 }
                 getById(id).setName(costume.getName());
             }
             if(costume.getCostumeSize() != null) {
-                if( !Validation.validateData(costume.getCostumeSize().toString(), ValidationParameter.COSTUME_SIZE)) {
-                    throw new EntityValidationException();
+                try {
+                    CostumeSize costumeSize = costume.getCostumeSize();
+                } catch(IllegalArgumentException e){
+                    throw new EntityValidationException("Invalid parameter for: CostumeSize");
                 }
                 getById(id).setCostumeSize(costume.getCostumeSize());
             }
             if(costume.getForWhom() != null) {
-                if( !Validation.validateData(costume.getForWhom().toString(), ValidationParameter.FOR_WHOM)) {
-                    throw new EntityValidationException();
+                try {
+                    ForWhom forWhom = costume.getForWhom();
+                }
+                catch(IllegalArgumentException e) {
+                    throw new EntityValidationException("Invalid parameter for: ForWhom");
                 }
                 getById(id).setForWhom(costume.getForWhom());
             }
-            if(costume.getPrice() < 999999999) {
-                if( !Validation.validateData(Double.toString(costume.getPrice()), ValidationParameter.PRICE)) {
-                    throw new EntityValidationException();
-                }
-                getById(id).setPrice(costume.getPrice());
+            if(!Validation.validateData(Double.toString(costume.getPrice()), ValidationParameter.PRICE)) {
+                throw new EntityValidationException("Price of the costume is invalid");
             }
+            getById(id).setPrice(costume.getPrice());
+
 
 
         }

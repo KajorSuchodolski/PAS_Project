@@ -43,6 +43,8 @@ public class CostumeManager {
         return costumeRepository.getAll();
     }
 
+    public List<Costume> getAllByRentStatus(boolean flag) { return costumeRepository.getAllByRentStatus(flag); }
+
     public List<Costume> searchAllCostumesByName(String name) {
         return costumeRepository.searchCostumesByName(name);
     }

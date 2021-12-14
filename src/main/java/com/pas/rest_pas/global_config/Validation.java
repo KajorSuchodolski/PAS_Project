@@ -72,23 +72,9 @@ public class Validation {
 
                 return !matcher.matches();
 
-            case COSTUME_SIZE:
-                for(CostumeSize value : CostumeSize.values()) {
-                    if(parameter.equals(value.toString())) {
-                        return true;
-                    }
-                }
-                return false;
 
-            case FOR_WHOM:
-                for(ForWhom value : ForWhom.values()) {
-                    if(parameter.equals(value.toString())) {
-                        return true;
-                    }
-                }
-                return false;
             case PRICE:
-                if(Double.parseDouble(parameter) < 0) {
+                if(Double.parseDouble(parameter) <= 0 || Double.parseDouble(parameter) >= 200) {
                     return false;
                 }
             default:

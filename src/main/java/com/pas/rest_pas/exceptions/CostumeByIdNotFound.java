@@ -5,6 +5,6 @@ import javax.ws.rs.core.Response;
 
 public class CostumeByIdNotFound extends WebApplicationException {
     public CostumeByIdNotFound() {
-        super("Costume with given ID was not found!", Response.Status.NOT_FOUND);
+        super(Response.status(Response.Status.NOT_FOUND).entity("Costume with given ID was not found!").build());
     }
 }

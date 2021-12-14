@@ -5,6 +5,6 @@ import javax.ws.rs.core.Response;
 
 public class DateInPastException extends WebApplicationException {
     public DateInPastException() {
-        super("The given date is in past!", Response.Status.BAD_REQUEST);
+        super(Response.status(Response.Status.BAD_REQUEST).entity("The given date is in past!").build());
     }
 }

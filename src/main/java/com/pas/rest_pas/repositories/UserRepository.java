@@ -58,7 +58,7 @@ public class UserRepository extends AbstractRepository<User> {
                 .orElse(null);
     }
 
-    public User getUserByEmail(String login) {
+    private User getUserByEmail(String login) {
         return getAll()
                 .stream()
                 .filter(e -> login.equals(e.getEmail()))
@@ -104,31 +104,31 @@ public class UserRepository extends AbstractRepository<User> {
         } else {
             if(user.getFirstName() != null) {
                 if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME) ) {
-                    throw new EntityValidationException();
+                    throw new EntityValidationException("User firstname is invalid");
                 }
                 getUserByLogin(login).setFirstName(user.getFirstName());
             }
             if(user.getLastName() != null) {
                 if(Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME) ) {
-                    throw new EntityValidationException();
+                    throw new EntityValidationException("User lastname is invalid");
                 }
                 getUserByLogin(login).setLastName(user.getLastName());
             }
             if(user.getLogin() != null) {
-                if(Validation.validateData(user.getLogin(), ValidationParameter.LOGIN) ) {
-                    throw new EntityValidationException();
+                if(Validation.validateData(user.getLogin(), ValidationParameter.LOGIN) || getUserByLogin(login) != null) {
+                    throw new EntityValidationException("User login is invalid");
                 }
                 getUserByLogin(login).setLogin(user.getLogin());
             }
             if(user.getPassword() != null) {
                 if(Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD) ) {
-                    throw new EntityValidationException();
+                    throw new EntityValidationException("User password is invalid");
                 }
                 getUserByLogin(login).setPassword(user.getPassword());
             }
             if(user.getEmail() != null) {
-                if(Validation.validateData(user.getEmail(), ValidationParameter.EMAIL) ) {
-                    throw new EntityValidationException();
+                if(Validation.validateData(user.getEmail(), ValidationParameter.EMAIL) || getUserByEmail(user.getEmail()) != null) {
+                    throw new EntityValidationException("User email is invalid");
                 }
                 getUserByLogin(login).setEmail(user.getEmail());
             }

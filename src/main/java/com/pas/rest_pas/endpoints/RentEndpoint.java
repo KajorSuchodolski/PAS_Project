@@ -52,13 +52,19 @@ public class RentEndpoint {
     // DELETE
     @DELETE
     @Path("/delete/{UUID}")
-    public void deleteRent(@PathParam("UUID") UUID rentId) throws RentByIdNotFound {
+    public Response deleteRent(@PathParam("UUID") UUID rentId) throws RentByIdNotFound {
         rentManager.deleteRentFromRepo(rentId);
+        return Response.ok(Response.Status.OK)
+                .entity("Rent removed successfully")
+                .build();
     }
 
     @PUT
     @Path("/end")
-    public void endRent(@QueryParam("UUID") UUID rentId, @QueryParam("date") String date) throws RentByIdNotFound{
+    public Response endRent(@QueryParam("UUID") UUID rentId, @QueryParam("date") String date) throws RentByIdNotFound{
         rentManager.endRent(date, rentId);
+        return Response.ok(Response.Status.OK)
+                .entity("Rent was ended successfully")
+                .build();
     }
 }
