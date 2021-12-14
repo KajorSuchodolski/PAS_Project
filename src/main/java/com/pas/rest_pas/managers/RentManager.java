@@ -2,10 +2,13 @@ package com.pas.rest_pas.managers;
 import com.pas.rest_pas.entities.costume.Costume;
 import com.pas.rest_pas.exceptions.*;
 import com.pas.rest_pas.exceptions.UserByLoginNotFound;
+import com.pas.rest_pas.global_config.Validation;
+import com.pas.rest_pas.global_config.ValidationParameter;
 import com.pas.rest_pas.repositories.RentRepository;
 import com.pas.rest_pas.entities.Rent;
 
 import javax.inject.Inject;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -42,13 +45,27 @@ public class RentManager {
         return rentRepository.getAll();
     }
 
-    public void addRent(String userLogin, List<UUID> costumeIds, String date) throws UserByLoginNotFound, CostumeInUseException, CostumeByIdNotFound {
+    public void addRent(String userLogin, List<UUID> costumeIds, String date) throws UserByLoginNotFound, CostumeInUseException, CostumeByIdNotFound, DateInPastException, WrongDateFormatException {
         if (userManager.getUserByLogin(userLogin) == null) {
             throw new UserByLoginNotFound();
         }
         if (!userManager.getUserByLogin(userLogin).isActive()) {
             throw new UserInactiveException();
         }
+        if (!Objects.equals(date, "now")) {
+            try {
+                LocalDate.parse(date);
+            } catch (DateTimeException e) {
+                throw new WrongDateFormatException();
+            }
+
+            LocalDate dateRented = LocalDate.parse(date);
+
+            if (dateRented.isBefore(LocalDate.now())) {
+                throw new DateInPastException();
+            }
+        }
+
 
         List<Costume> costumes = new ArrayList<>();
         Iterator<UUID> id = costumeIds.iterator();
@@ -74,6 +91,7 @@ public class RentManager {
             rentRepository.add(newRent);
         } else {
             LocalDate dateRented = LocalDate.parse(date);
+
             Rent newRent = new Rent(userManager.getUserByLogin(userLogin), costumes, totalPrice, dateRented);
             rentRepository.add(newRent);
         }

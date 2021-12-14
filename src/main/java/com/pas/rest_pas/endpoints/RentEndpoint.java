@@ -3,10 +3,7 @@ package com.pas.rest_pas.endpoints;
 import com.pas.rest_pas.entities.Rent;
 import com.pas.rest_pas.entities.costume.Costume;
 import com.pas.rest_pas.entities.user.User;
-import com.pas.rest_pas.exceptions.CostumeInUseException;
-import com.pas.rest_pas.exceptions.RentByIdNotFound;
-import com.pas.rest_pas.exceptions.UserAdditionException;
-import com.pas.rest_pas.exceptions.UserByLoginNotFound;
+import com.pas.rest_pas.exceptions.*;
 import com.pas.rest_pas.managers.RentManager;
 import com.pas.rest_pas.managers.UserManager;
 
@@ -26,7 +23,7 @@ public class RentEndpoint {
     @POST
     @Path("/add")
     @Consumes("application/json")
-    public Response addRent( @QueryParam("userLogin") String userLogin, @QueryParam("date") String date, List<UUID> costumeIds) throws CostumeInUseException {
+    public Response addRent( @QueryParam("userLogin") String userLogin, @QueryParam("date") String date, List<UUID> costumeIds) throws CostumeInUseException, DateInPastException, WrongDateFormatException {
         rentManager.addRent(userLogin, costumeIds, date);
         return Response.ok(Response.Status.OK)
                 .entity("Rent added successfully")
