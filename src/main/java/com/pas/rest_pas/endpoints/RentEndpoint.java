@@ -25,7 +25,7 @@ public class RentEndpoint {
     @Consumes("application/json")
     public Response addRent( @QueryParam("userLogin") String userLogin, @QueryParam("date") String date, List<UUID> costumeIds) throws CostumeInUseException, DateInPastException, WrongDateFormatException {
         rentManager.addRent(userLogin, costumeIds, date);
-        return Response.ok(Response.Status.OK)
+        return Response.ok(Response.Status.CREATED)
                 .entity("Rent added successfully")
                 .build();
     }

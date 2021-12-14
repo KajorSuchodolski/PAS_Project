@@ -53,7 +53,7 @@ public class UserEndpoint {
     @Consumes("application/json")
     public Response addUser( User user) {
         userManager.addUser(user);
-        return Response.ok(Response.Status.OK)
+        return Response.ok(Response.Status.CREATED)
                 .entity("User has been added")
                 .build();
     }

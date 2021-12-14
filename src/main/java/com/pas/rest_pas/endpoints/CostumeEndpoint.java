@@ -74,7 +74,7 @@ public class CostumeEndpoint {
     @Consumes("application/json")
     public Response addCostume( Costume costume) {
         costumeManager.addCostume(costume);
-        return Response.ok(Response.Status.OK)
+        return Response.ok(Response.Status.CREATED)
                 .entity("Costume added!")
                 .build();
     }
