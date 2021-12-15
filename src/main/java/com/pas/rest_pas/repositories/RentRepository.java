@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -42,10 +43,9 @@ public class RentRepository extends AbstractRepository<Rent> {
         } else {
             LocalDate dateRentEnded = LocalDate.parse(date);
             System.out.println(dateRentEnded);
-//            if(dateRentEnded.isBefore(LocalDate.now())) {
-//                throw new DateInPastException();
-//            }
-            if(dateRentEnded.isBefore(LocalDate.now()))
+            if(dateRentEnded.isBefore(getRentById(rentId).getBeginTime())) {
+                throw new EndRentBeforeBeginException();
+            }
             getRentById(rentId).setEndTime(dateRentEnded);
         }
     }
@@ -59,5 +59,25 @@ public class RentRepository extends AbstractRepository<Rent> {
                 it.next().setRented(false);
             }
         }
+    }
+
+    public List<Rent> userCurrentRents(String userLogin) {
+        Predicate<Rent> byLogin = rent -> rent.getUser().getLogin().equals(userLogin);
+
+        return getAll()
+                .stream()
+                .filter(byLogin)
+                .filter(e -> e.getEndTime() == null)
+                .collect(Collectors.toList());
+    }
+
+    public List<Rent> userPastRents(String userLogin) {
+        Predicate<Rent> byLogin = rent -> rent.getUser().getLogin().equals(userLogin);
+
+        return getAll()
+                .stream()
+                .filter(byLogin)
+                .filter(e -> e.getEndTime() != null)
+                .collect(Collectors.toList());
     }
 }

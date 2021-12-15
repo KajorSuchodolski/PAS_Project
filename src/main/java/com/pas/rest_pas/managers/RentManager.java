@@ -1,5 +1,6 @@
 package com.pas.rest_pas.managers;
 import com.pas.rest_pas.entities.costume.Costume;
+import com.pas.rest_pas.entities.user.User;
 import com.pas.rest_pas.exceptions.*;
 import com.pas.rest_pas.exceptions.UserByLoginNotFound;
 import com.pas.rest_pas.global_config.Validation;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RentManager {
 
@@ -99,6 +101,19 @@ public class RentManager {
 
     public Rent getRentById(UUID rentId) {
         return rentRepository.getRentById(rentId);
+    }
+
+    public List<Rent> userCurrentRents(String userLogin) throws UserByLoginNotFound {
+        if (userManager.getUserByLogin(userLogin) == null) {
+            throw new UserByLoginNotFound();
+        }
+        return rentRepository.userCurrentRents(userLogin);
+    }
+    public List<Rent> userPastRents(String userLogin) throws UserByLoginNotFound {
+        if (userManager.getUserByLogin(userLogin) == null) {
+            throw new UserByLoginNotFound();
+        }
+        return rentRepository.userPastRents(userLogin);
     }
 
     public void endRent(String date, UUID rentId) throws RentByIdNotFound{

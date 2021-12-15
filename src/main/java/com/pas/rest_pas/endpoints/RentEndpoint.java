@@ -12,6 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("/rents")
 public class RentEndpoint {
@@ -45,6 +46,21 @@ public class RentEndpoint {
     public Rent getRentById(@PathParam("UUID") UUID rentId) throws RentByIdNotFound {
         return rentManager.getRentById(rentId);
     }
+
+    @GET
+    @Path("/userCurrentRents")
+    @Produces("application/json")
+    public List<Rent> userCurrentRents(@QueryParam("userLogin") String userLogin) throws UserByLoginNotFound {
+        return rentManager.userCurrentRents(userLogin);
+    }
+
+    @GET
+    @Path("/userPastRents")
+    @Produces("application/json")
+    public List<Rent> userPastRents(@QueryParam("userLogin") String userLogin) throws UserByLoginNotFound {
+        return rentManager.userPastRents(userLogin);
+    }
+
 
     // DELETE
     @DELETE
