@@ -1,8 +1,9 @@
 package com.pas.rest_pas.repositories;
 import com.pas.rest_pas.exceptions.EntityValidationException;
+import com.pas.rest_pas.exceptions.UserByLoginNotFound;
 import com.pas.rest_pas.exceptions.UserUpdateException;
 import com.pas.rest_pas.entities.user.User;
-import com.pas.rest_pas.exceptions.UserAdditionException;
+import com.pas.rest_pas.exceptions.UserCreationException;
 import com.pas.rest_pas.global_config.Validation;
 import com.pas.rest_pas.global_config.ValidationParameter;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class UserRepository extends AbstractRepository<User> {
 
-    public UserRepository() throws UserAdditionException {
+    public UserRepository() throws UserCreationException {
         User user1 = new User(
                 "Radoslaw",
                 "Zyzik",
@@ -40,13 +41,18 @@ public class UserRepository extends AbstractRepository<User> {
         addUser(user2);
         addUser(user3);
     }
-    public void activateUser(String login) throws UserUpdateException{
-        if(getUserByLogin(login) == null) throw new UserUpdateException();
+
+    public void activateUser( String login ) throws UserByLoginNotFound {
+        if( getUserByLogin(login) == null ) {
+            throw new UserByLoginNotFound();
+        }
         getUserByLogin(login).setActive(true);
     }
 
-    public void deactivateUser(String login) throws UserUpdateException{
-        if(getUserByLogin(login) == null) throw new UserUpdateException();
+    public void deactivateUser( String login ) throws UserByLoginNotFound {
+        if( getUserByLogin(login) == null ) {
+            throw new UserByLoginNotFound();
+        }
         getUserByLogin(login).setActive(false);
     }
 
@@ -58,7 +64,7 @@ public class UserRepository extends AbstractRepository<User> {
                 .orElse(null);
     }
 
-    private User getUserByEmail(String login) {
+    private User getUserByEmail( String login ) {
         return getAll()
                 .stream()
                 .filter(e -> login.equals(e.getEmail()))
@@ -66,72 +72,33 @@ public class UserRepository extends AbstractRepository<User> {
                 .orElse(null);
     }
 
-    public List<User> searchUsersByLogin(String login) {
+    public List<User> searchUsersByLogin( String login ) {
         return getAll()
                 .stream()
                 .filter(e -> e.getLogin().contains(login))
                 .collect(Collectors.toList());
     }
 
-    public void addUser(User user) throws UserAdditionException {
-        if(user.getLogin() == null
-                || user.getEmail() == null
-                || user.getPassword() == null
-                || user.getFirstName() == null
-                || user.getLastName() == null) {
-            throw new UserAdditionException();
-        }
-
+    public void addUser( User user ) throws UserCreationException {
         if(getUserByLogin(user.getLogin()) != null) {
-            throw new UserAdditionException();
+            throw new UserCreationException("User login already exists");
         }
         if(getUserByEmail(user.getEmail()) != null) {
-            throw new UserAdditionException();
-        }
-        if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME)
-        || Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME)
-        || Validation.validateData(user.getLogin(), ValidationParameter.LOGIN)
-        || Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD)
-                || Validation.validateData(user.getEmail(), ValidationParameter.EMAIL)) {
-            throw new UserAdditionException();
+            throw new UserCreationException("User email already exists");
         }
         add(user);
     }
 
     public void updateUser(String login, User user) throws UserUpdateException {
         if(getUserByLogin(login) == null) {
-            throw new UserUpdateException();
+            throw new UserUpdateException("User with given login does not exist");
         } else {
-            if(user.getFirstName() != null) {
-                if(Validation.validateData(user.getFirstName(), ValidationParameter.FIRSTNAME) ) {
-                    throw new EntityValidationException("User firstname is invalid");
-                }
-                getUserByLogin(login).setFirstName(user.getFirstName());
+            if(getUserByEmail(user.getEmail()) != null) {
+                throw new UserUpdateException("User email already exists");
             }
-            if(user.getLastName() != null) {
-                if(Validation.validateData(user.getLastName(), ValidationParameter.LASTNAME) ) {
-                    throw new EntityValidationException("User lastname is invalid");
-                }
-                getUserByLogin(login).setLastName(user.getLastName());
-            }
-            if(user.getLogin() != null) {
-                if(Validation.validateData(user.getLogin(), ValidationParameter.LOGIN) || getUserByLogin(login) != null) {
-                    throw new EntityValidationException("User login is invalid");
-                }
-                getUserByLogin(login).setLogin(user.getLogin());
-            }
-            if(user.getPassword() != null) {
-                if(Validation.validateData(user.getPassword(), ValidationParameter.PASSWORD) ) {
-                    throw new EntityValidationException("User password is invalid");
-                }
-                getUserByLogin(login).setPassword(user.getPassword());
-            }
-            if(user.getEmail() != null) {
-                if(Validation.validateData(user.getEmail(), ValidationParameter.EMAIL) || getUserByEmail(user.getEmail()) != null) {
-                    throw new EntityValidationException("User email is invalid");
-                }
-                getUserByLogin(login).setEmail(user.getEmail());
-            }
+            delete(getUserByLogin(login));
+            add(user);
         }
+
     }
 }
