@@ -44,7 +44,7 @@ public class UserEndpoint {
     @Produces("application/json")
     public Response getUserById( @PathParam("id") String uuid ) {
         if(uuid == null || uuid.trim().equals("")) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("UUID parameter is empty!").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Id parameter is empty!").build();
         }
         try {
             return Response.ok().entity(userManager.getUserById(UUID.fromString(uuid))).build();
@@ -57,6 +57,9 @@ public class UserEndpoint {
     @Path("/searchByLogin/{login}")
     @Produces("application/json")
     public Response searchUsersByLogin(@PathParam("login") String login) {
+        if(login == null || login.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Login parameter is empty!").build();
+        }
         return Response.ok().entity(userManager.searchUsersByLogin(login)).build();
     }
 
@@ -82,8 +85,14 @@ public class UserEndpoint {
     // UPDATE
     @PUT
     @Path("/update/{login}")
-    @Produces("application/text")
+    @Produces("application/json")
     public Response updateUser(@PathParam("login") String login, User user) {
+        if(login == null || login.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Login parameter is empty").build();
+        }
+        if(user == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Given user is null").build();
+        }
         try {
             userManager.updateUser(login, user);
             return Response.ok(Response.Status.OK)
@@ -96,7 +105,11 @@ public class UserEndpoint {
 
     @PUT
     @Path("/activate/{login}")
+    @Produces("application/json")
     public Response activateUser(@PathParam("login") String login) {
+        if(login == null || login.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Login parameter is empty").build();
+        }
         try {
             userManager.activateUser(login);
             return Response.ok(Response.Status.OK)
@@ -109,7 +122,11 @@ public class UserEndpoint {
 
     @PUT
     @Path("/deactivate/{login}")
+    @Produces("application/json")
     public Response deactivateUser(@PathParam("login") String login) {
+        if(login == null || login.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Login parameter is empty").build();
+        }
         try {
             userManager.deactivateUser(login);
             return Response.ok(Response.Status.OK)

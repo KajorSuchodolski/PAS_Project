@@ -2,6 +2,7 @@ package com.pas.rest_pas.endpoints;
 
 import com.pas.rest_pas.entities.costume.Costume;
 import com.pas.rest_pas.exceptions.CostumeByIdNotFound;
+import com.pas.rest_pas.exceptions.EntityValidationException;
 import com.pas.rest_pas.managers.CostumeManager;
 
 import javax.inject.Inject;
@@ -20,51 +21,77 @@ public class CostumeEndpoint {
     @GET
     @Path("/all")
     @Produces("application/json")
-    public List<Costume> getAll() {
-        return costumeManager.getAll();
+    public Response getAll() {
+        return Response.ok().entity(costumeManager.getAll()).build();
     }
 
     @GET
     @Path("/getAllRented")
     @Produces("application/json")
-    public List<Costume> getAllRented() {
-        return costumeManager.getAllByRentStatus(true);
+    public Response getAllRented() {
+        return Response.ok().entity(costumeManager.getAllByRentStatus(true)).build();
     }
 
     @GET
     @Path("/getAllAvailable")
     @Produces("application/json")
-    public List<Costume> getAllAvailable() {
-        return costumeManager.getAllByRentStatus(false);
+    public Response getAllAvailable() {
+        return Response.ok().entity(costumeManager.getAllByRentStatus(false)).build();
     }
-
 
     @GET
     @Path("/getAllByAge/{age}")
     @Produces("application/json")
-    public List<Costume> getAllCostumesByAge( @PathParam("age") String age ) {
-        return costumeManager.getAllCostumesByAge(age);
+    public Response getAllCostumesByAge( @PathParam("age") String age ) {
+        if(age == null || age.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Age parameter is empty").build();
+        }
+        try {
+            return Response.ok().entity(costumeManager.getAllCostumesByAge(age)).build();
+        } catch(EntityValidationException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @GET
     @Path("/getById/{id}")
     @Produces("application/json")
-    public Costume getCostumeById( @PathParam("id") String uuid ) {
-        return costumeManager.getCostumeById(UUID.fromString(uuid));
+    public Response getCostumeById( @PathParam("id") String uuid ) {
+        if(uuid == null || uuid.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Id parameter is empty").build();
+        }
+        try {
+            return Response.ok().entity(costumeManager.getCostumeById(UUID.fromString(uuid))).build();
+        } catch(CostumeByIdNotFound e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @GET
     @Path("/searchByName/{name}")
     @Produces("application/json")
-    public List<Costume> searchAllCostumesByName(@PathParam("name") String name) {
-        return costumeManager.searchAllCostumesByName(name) ;
+    public Response searchAllCostumesByName(@PathParam("name") String name) {
+        if(name == null || name.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Name parameter is empty").build();
+        }
+        return Response.ok().entity(costumeManager.searchAllCostumesByName(name)).build();
     }
 
     @GET
-    @Path("/getAllByParams/")
+    @Path("/getAllByParams")
     @Produces("application/json")
-    public List<Costume> getAllCostumesByParams(@QueryParam("age") String age, @QueryParam("size") String size) {
-        return costumeManager.getAllCostumesByParams(age, size) ;
+    public Response getAllCostumesByParams(@QueryParam("age") String age, @QueryParam("size") String size) {
+        if(age == null || age.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Age parameter is empty").build();
+        }
+        if(size == null || size.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Size parameter is empty").build();
+        }
+        try {
+            return Response.ok().entity(costumeManager.getAllCostumesByParams(age, size)).build();
+        } catch(EntityValidationException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
 
@@ -81,19 +108,27 @@ public class CostumeEndpoint {
 
     // UPDATE
 
-//    @PUT
-//    @Path("/update/{id}")
-//    @Consumes("application/json")
-//    public Response updateCostume(@PathParam("id") String id, Costume costume) throws CostumeByIdNotFound {
-//        try {
-//            costumeManager.updateCostume(UUID.fromString(id), costume);
-//            return Response.ok(Response.Status.OK)
-//                    .entity("Costume updated successfully")
-//                    .build();
-//        } catch(CostumeByIdNotFound ex) {
-//            return
-//        }
-//    }
+    @PUT
+    @Path("/update/{id}")
+    @Consumes("application/json")
+    public Response updateCostume(@PathParam("id") String id, Costume costume) throws CostumeByIdNotFound {
+        if(id == null || id.trim().equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Id parameter is empty").build();
+        }
+        if(costume == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Given costume is null").build();
+        }
+        try {
+            costumeManager.updateCostume(UUID.fromString(id), costume);
+            return Response.ok(Response.Status.OK)
+                    .entity("Costume updated successfully")
+                    .build();
+        } catch(CostumeByIdNotFound e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch(EntityValidationException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
 
     @PUT
     @Path("/activate/{id}")
