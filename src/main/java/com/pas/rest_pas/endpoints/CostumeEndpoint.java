@@ -81,15 +81,19 @@ public class CostumeEndpoint {
 
     // UPDATE
 
-    @PUT
-    @Path("/update/{id}")
-    @Consumes("application/json")
-    public Response updateCostume(@PathParam("id") String id, Costume costume) throws CostumeByIdNotFound {
-        costumeManager.updateCostume(UUID.fromString(id), costume);
-        return Response.ok(Response.Status.OK)
-                .entity("Costume updated successfully")
-                .build();
-    }
+//    @PUT
+//    @Path("/update/{id}")
+//    @Consumes("application/json")
+//    public Response updateCostume(@PathParam("id") String id, Costume costume) throws CostumeByIdNotFound {
+//        try {
+//            costumeManager.updateCostume(UUID.fromString(id), costume);
+//            return Response.ok(Response.Status.OK)
+//                    .entity("Costume updated successfully")
+//                    .build();
+//        } catch(CostumeByIdNotFound ex) {
+//            return
+//        }
+//    }
 
     @PUT
     @Path("/activate/{id}")

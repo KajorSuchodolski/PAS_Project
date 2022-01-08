@@ -1,10 +1,10 @@
 package com.pas.rest_pas.exceptions;
 
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Response;
 
-public class UserByLoginNotFound extends NotFoundException {
-    public UserByLoginNotFound() {
+public class UserByIdNotFound extends NotFoundException {
+
+    public UserByIdNotFound() {
         super("User with given login was not found!");
     }
 }

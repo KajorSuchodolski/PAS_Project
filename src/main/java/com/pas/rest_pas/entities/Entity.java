@@ -16,10 +16,6 @@ public abstract class Entity {
         return id;
     }
 
-    public void setId( UUID id ) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals( Object o ) {
         if( this == o ) return true;
