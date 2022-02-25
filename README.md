@@ -3,4 +3,4 @@ This project contains all of the obligatory tasks (REST, MVC and Security) and a
 
 > ## WARNING
 > - Be aware that project has a lot of bugs and was written only to pass
-> - Informing container about user does not work and is commented. It is the only correct solution 
+> - Informing container about user does not work and is commented. It is the only correct solution, which should be implemented.
