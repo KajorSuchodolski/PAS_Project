@@ -32,8 +32,7 @@ public class LoginRestClient implements Serializable {
 
     private WebTarget getTarget() {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("https://localhost:8181/REST-1.0-SNAPSHOT");
-        return target.path("authenticate");
+        return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/authenticate");
     }
 
     private String token;
@@ -51,13 +50,12 @@ public class LoginRestClient implements Serializable {
             session.setAttribute("Role", role);
             session.setAttribute("Login", jwt.getClaims().get("sub").toString().replace("\"", ""));
 
-//           System.out.println(context.getRequest().toString());
-//           userStatusBean.setRole(role);
-// userStatusBean.setLogin(jwt.getClaims().get("sub").toString().replace(""", ""));
-//           userStatusBean.setAdmin(role.equals("Admin"));
-//           userStatusBean.setManager(role.equals("Manager"));
-//           userStatusBean.setClient(role.equals("Client"));
-//           userStatusBean.setLoggedIn(true);
+           userStatusBean.setRole(role);
+           userStatusBean.setLogin(jwt.getClaims().get("sub").toString().replace("\"", ""));
+           userStatusBean.setAdmin(role.equals("Admin"));
+           userStatusBean.setManager(role.equals("Manager"));
+           userStatusBean.setClient(role.equals("Client"));
+           userStatusBean.setLoggedIn(true);
 
             CredentialValidationResult result = new CredentialValidationResult(login, new HashSet<>(groups));
 //           context.authenticate(servletRequest, servletResponse, new AuthenticationParameters(login, new HashSet<>(groups)));

@@ -29,7 +29,7 @@ public class UserRestClient implements Serializable {
 
     private WebTarget getTarget() {
        Client client = ClientBuilder.newClient();
-       return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/users");
+       return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/user");
 
     }
 

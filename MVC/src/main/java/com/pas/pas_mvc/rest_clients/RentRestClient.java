@@ -23,7 +23,7 @@ public class RentRestClient implements Serializable {
 
     private WebTarget getTarget() {
         Client client = ClientBuilder.newClient();
-        return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/rents");
+        return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/rent");
     }
 
     public List<RentDTO> getAllRents() {

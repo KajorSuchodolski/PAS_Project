@@ -23,7 +23,7 @@ public class CostumeRestClient implements Serializable {
 
     private WebTarget getTarget() {
         Client client = ClientBuilder.newClient();
-        return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/costumes");
+        return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/costume");
     }
 
 

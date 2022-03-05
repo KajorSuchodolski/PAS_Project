@@ -61,15 +61,14 @@ public class LoginController {
     }
 
     @POST
-    @Path("{id}/change-password")
+    @Path("{login}/change-password")
     @RolesAllowed({"Admin", "Manager", "Client"})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changeUserPassword( @PathParam("id") String login, String body) {
+    public Response changeUserPassword( @PathParam("login") String login, String body) {
         JsonObject jsonBody = JsonParser.parseString(body).getAsJsonObject();
         String newPassword = jsonBody.get("password").getAsString();
-        System.out.println("Trying to change user password to " + newPassword);
-
         try {
+            System.out.println(login + "      " + newPassword);
             userManager.updateUserPassword(login, newPassword);
             return Response.ok().build();
         } catch (UserByLoginNotFound | UserUpdateException e) {
