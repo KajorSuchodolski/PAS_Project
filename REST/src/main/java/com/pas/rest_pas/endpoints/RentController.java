@@ -4,23 +4,25 @@ import com.pas.rest_pas.exceptions.*;
 import com.pas.rest_pas.managers.RentManager;
 
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
 @Path("/rents")
-public class RentEndpoint {
+@ApplicationScoped
+public class RentController {
 
     @Inject
     private RentManager rentManager;
 
     // CREATE
     @POST
-    @Path("/add")
-    @Produces("application/json")
-    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response addRent( @QueryParam("login") String login, @QueryParam("date") String date, List<UUID> costumeIds) {
         if(login == null || login.trim().equals("")) {
@@ -48,24 +50,23 @@ public class RentEndpoint {
 
     // READ
     @GET
-    @Path("/all")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response getAll() {
         return Response.ok().entity(rentManager.getAll()).build();
     }
 
     @GET
-    @Path("/allCurrent")
-    @Produces("application/json")
+    @Path("/all-current-rents")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response getAllCurrent() {
         return Response.ok().entity(rentManager.getAllCurrent()).build();
     }
 
     @GET
-    @Path("/getById/{id}")
-    @Produces("application/json")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response getRentById(@PathParam("id") String rentId) {
         if(rentId == null || rentId.trim().equals("")) {
@@ -81,8 +82,8 @@ public class RentEndpoint {
     }
 
     @GET
-    @Path("/userCurrentRents/{login}")
-    @Produces("application/json")
+    @Path("/{login}/current-rents")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response userCurrentRents(@PathParam("login") String login) {
         if(login == null || login.trim().equals("")) {
@@ -96,8 +97,8 @@ public class RentEndpoint {
     }
 
     @GET
-    @Path("/userPastRents/{login}")
-    @Produces("application/json")
+    @Path("/{login}/past-rents")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response userPastRents(@PathParam("login") String login)  {
         if(login == null || login.trim().equals("")) {
@@ -110,10 +111,10 @@ public class RentEndpoint {
     }
 
     @GET
-    @Path("/getCostume/{id}")
-    @Produces("application/json")
+    @Path("/costume-allocations")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager", "Client"})
-    public Response getCostumeAllocations(@PathParam("id") String costumeId) {
+    public Response getCostumeAllocations(@QueryParam("id") String costumeId) {
         if(costumeId == null || costumeId.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("RentID parameter is empty").build();
         }
@@ -129,8 +130,8 @@ public class RentEndpoint {
 
     // DELETE
     @DELETE
-    @Path("/delete/{id}")
-    @Produces("application/json")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response deleteRent(@PathParam("id") String rentId)  {
         if(rentId == null || rentId.trim().equals("")) {
@@ -153,10 +154,10 @@ public class RentEndpoint {
     *  */
 
     @PUT
-    @Path("/end")
-    @Produces("application/json")
+    @Path("/{id}/end")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
-    public Response endRent(@QueryParam("id") String rentId, @QueryParam("date") String date) throws RentByIdNotFound{
+    public Response endRent(@PathParam("id") String rentId, @QueryParam("date") String date) throws RentByIdNotFound{
         if(rentId == null || rentId.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("RentID parameter is empty").build();
         }

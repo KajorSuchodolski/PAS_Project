@@ -7,6 +7,10 @@ public abstract class AbstractManager {
 
     private AbstractRepository repository;
 
+    public AbstractManager() {
+
+    }
+
     public AbstractManager(AbstractRepository repository) {
         this.repository = repository;
     }

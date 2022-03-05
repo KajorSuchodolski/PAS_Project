@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class RentManager {
+public class RentManager extends AbstractManager {
 
     private RentRepository rentRepository;
     private UserManager userManager;

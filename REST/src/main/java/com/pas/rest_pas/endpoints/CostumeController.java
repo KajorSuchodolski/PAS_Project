@@ -9,49 +9,51 @@ import com.pas.rest_pas.exceptions.CostumeCreationException;
 import com.pas.rest_pas.exceptions.CostumeInUseException;
 
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
 @Path("/costumes")
-public class CostumeEndpoint {
+@ApplicationScoped
+public class CostumeController {
 
     @Inject
     private CostumeManager costumeManager;
 
     // READ
     @GET
-    @Path("/all")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response getAll() {
         return Response.ok().entity(costumeManager.getAll()).build();
     }
 
     @GET
-    @Path("/getAllRented")
-    @Produces("application/json")
+    @Path("/all-rented")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager", "Client"})
     public Response getAllRented() {
         return Response.ok().entity(costumeManager.getAllByRentStatus(true)).build();
     }
 
     @GET
-    @Path("/getAllAvailable")
-    @Produces("application/json")
+    @Path("/all-available")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager", "Client"})
     public Response getAllAvailable() {
         return Response.ok().entity(costumeManager.getAllByRentStatus(false)).build();
     }
 
     @GET
-    @Path("/getAllByAge/{age}")
-    @Produces("application/json")
+    @Path("/all-by-age")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
-    public Response getAllCostumesByAge( @PathParam("age") String age ) {
+    public Response getAllCostumesByAge( @QueryParam("age") String age ) {
         if(age == null || age.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Age parameter is empty").build();
         }
@@ -63,8 +65,8 @@ public class CostumeEndpoint {
     }
 
     @GET
-    @Path("/getById/{id}")
-    @Produces("application/json")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response getCostumeById( @PathParam("id") String uuid ) {
         if(uuid == null || uuid.trim().equals("")) {
@@ -79,10 +81,10 @@ public class CostumeEndpoint {
     }
 
     @GET
-    @Path("/searchByName/{name}")
-    @Produces("application/json")
+    @Path("/search-by-name")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
-    public Response searchAllCostumesByName(@PathParam("name") String name) {
+    public Response searchAllCostumesByName(@QueryParam("name") String name) {
         if(name == null || name.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Name parameter is empty").build();
         }
@@ -90,8 +92,8 @@ public class CostumeEndpoint {
     }
 
     @GET
-    @Path("/getAllByParams")
-    @Produces("application/json")
+    @Path("/costumes-by-params")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response getAllCostumesByParams(@QueryParam("age") String age, @QueryParam("size") String size) {
         if(age == null || age.trim().equals("")) {
@@ -109,9 +111,8 @@ public class CostumeEndpoint {
 
     // CREATE
     @POST
-    @Path("/add")
-    @Produces("application/json")
-    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response addCostume( Costume costume) {
         if(costume == null) {
@@ -130,9 +131,9 @@ public class CostumeEndpoint {
     // UPDATE
 
     @PUT
-    @Path("/update/{id}")
-    @Produces("application/json")
-    @Consumes("application/json")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response updateCostume( @PathParam("id") String id, Costume costume, @NotNull @NotEmpty @HeaderParam("If-Match") String etag) throws CostumeByIdNotFound {
         if(id == null || id.trim().equals("")) {
@@ -154,14 +155,13 @@ public class CostumeEndpoint {
         } catch(EntityValidationException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         } catch(IllegalArgumentException e) {
-            System.out.println("HAHAHHAHA");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
     @PUT
-    @Path("/activate/{id}")
-    @Produces("application/json")
+    @Path("/{id}/activate")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response activateRent(@PathParam("id") String id) {
         if(id == null || id.trim().equals("")) {
@@ -178,8 +178,8 @@ public class CostumeEndpoint {
     }
 
     @PUT
-    @Path("/deactivate/{id}")
-    @Produces("application/json")
+    @Path("/{id}/deactivate")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response deactivateRent(@PathParam("id") String id) {
         if(id == null || id.trim().equals("")) {
@@ -197,8 +197,8 @@ public class CostumeEndpoint {
 
     // DELETE
     @DELETE
-    @Path("/delete/{id}")
-    @Produces("application/json")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Manager"})
     public Response removeRent(@PathParam("id") String id) {
         if(id == null || id.trim().equals("")) {

@@ -27,13 +27,16 @@ public class UserRestClient implements Serializable {
     @Inject
     private LoginRestClient loginRestClient;
 
-    private Client client = ClientBuilder.newClient();
-    private WebTarget target = client.target("https://localhost:8181/REST-1.0-SNAPSHOT/rest/clients/");
+    private WebTarget getTarget() {
+       Client client = ClientBuilder.newClient();
+       return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/users");
+
+    }
 
 
     // CREATE
     public void postUser(UserDTO newUser) {
-         target.path("add")
+         getTarget()
                 .request(MediaType.APPLICATION_JSON)
                  .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .post(Entity.json(newUser));
@@ -41,7 +44,7 @@ public class UserRestClient implements Serializable {
 
     // READ
     public List<UserDTO> getAllUsers() {
-        return target.path("all")
+        return getTarget()
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(new GenericType<>(){});
@@ -49,8 +52,9 @@ public class UserRestClient implements Serializable {
 
     // READ - SEARCH BY LOGIN (LIST)
 
-    public List<UserDTO> searchUserByLogin(String searchLogin) {
-        return target.path("searchByLogin/" + searchLogin)
+    public List<UserDTO> searchUserByLogin(String login) {
+        return getTarget().path("/search-by-login")
+                .queryParam("login", login)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(new GenericType<>(){});
@@ -59,14 +63,16 @@ public class UserRestClient implements Serializable {
 
     // READ - GET BY LOGIN (USER)
 
-    public UserDTO getUserByLogin(String getLogin) {
-        Response response = target.path("getByLogin/" + getLogin)
+    public UserDTO getUserByLogin(String login) {
+        Response response = getTarget().path("get-by-login")
+                .queryParam("login", login)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get();
         String etag = (String) response.getHeaders().getFirst("Etag");
 
-        UserDTO userDTO = target.path("getByLogin/" + getLogin)
+        UserDTO userDTO = getTarget().path("get-by-login")
+                .queryParam("login", login)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(UserDTO.class);
@@ -76,8 +82,9 @@ public class UserRestClient implements Serializable {
 
     // READ - GET BY ID (USER)
 
-    public UserDTO getUserById(String getId) {
-        return target.path("getById/" + getId)
+    public UserDTO getUserById(String id) {
+        return getTarget().path("get-by-id")
+                .queryParam("login", id)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(UserDTO.class);
@@ -86,24 +93,23 @@ public class UserRestClient implements Serializable {
     // UPDATE
 
     public void updateUser(UserDTO newUser) {
-        System.out.println("Wywolano metode update user z rest clienta");
         switch(loginRestClient.getUserStatusBean().getRole()) {
             case "Admin" -> newUser.setAccessLevel("Admin");
             case "Manager" -> newUser.setAccessLevel("Manager");
             default -> newUser.setAccessLevel("Client");
         }
-        Response.ok().entity(target.path("update/" + newUser.getLogin())
+        getTarget().path(newUser.getLogin() + "/update")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .header("If-Match", newUser.getEtag())
-                .put(Entity.json(newUser))).build();
+                .put(Entity.json(newUser));
 
     }
 
     // UPDATE - ACTIVATE
 
-    public void activateUser(String activateLogin) {
-         target.path("activate/" + activateLogin)
+    public void activateUser(String login) {
+         getTarget().path(login + "/activate")
                 .request(MediaType.APPLICATION_JSON)
                  .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .put(Entity.json(""));
@@ -111,18 +117,10 @@ public class UserRestClient implements Serializable {
 
     // UPDATE - DEACTIVATE
 
-    public void deactivateUser(String deactivateLogin) {
-        target.path("deactivate/" + deactivateLogin)
+    public void deactivateUser(String login) {
+        getTarget().path(login + "/deactivate")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .put(Entity.json(""));
-    }
-
-    public LoginRestClient getLoginRestClient() {
-        return loginRestClient;
-    }
-
-    public void setLoginRestClient( LoginRestClient loginRestClient ) {
-        this.loginRestClient = loginRestClient;
     }
 }

@@ -17,7 +17,7 @@ import java.util.UUID;
 
 
 @ApplicationScoped
-public class UserManager  {
+public class UserManager extends AbstractManager  {
 
     private UserRepository userRepository;
 

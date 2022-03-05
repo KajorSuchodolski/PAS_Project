@@ -11,35 +11,35 @@ import com.pas.rest_pas.filter.SignatureVerifier;
 import com.pas.rest_pas.managers.UserManager;
 
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.stream.JsonParser;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
-@Path("/clients")
-public class UserEndpoint {
+@Path("/users")
+@ApplicationScoped
+public class UserController {
 
     @Inject
     private UserManager userManager;
 
     // READ
     @GET
-    @Path("/all")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin", "Client"})
     public Response getAll() {
         return Response.ok().entity(userManager.getAll()).build();
     }
 
     @GET
-    @Path("/getByLogin/{login}")
-    @Produces("application/json")
+    @Path("/get-by-login")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
-    public Response getUserByLogin(@PathParam("login") String login) {
+    public Response getUserByLogin(@QueryParam("login") String login) {
         if(login == null || login.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Login parameter is empty!").build();
         }
@@ -53,10 +53,10 @@ public class UserEndpoint {
     }
 
     @GET
-    @Path("/getById/{id}")
-    @Produces("application/json")
+    @Path("/get-by-id")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
-    public Response getUserById( @PathParam("id") String uuid ) {
+    public Response getUserById( @QueryParam("id") String uuid ) {
         if(uuid == null || uuid.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Id parameter is empty!").build();
         }
@@ -68,10 +68,10 @@ public class UserEndpoint {
     }
 
     @GET
-    @Path("/searchByLogin/{login}")
-    @Produces("application/json")
+    @Path("/search-by-login")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
-    public Response searchUsersByLogin(@PathParam("login") String login) {
+    public Response searchUsersByLogin(@QueryParam("login") String login) {
         if(login == null || login.trim().equals("")) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Login parameter is empty!").build();
         }
@@ -80,9 +80,8 @@ public class UserEndpoint {
 
     // CREATE
     @POST
-    @Path("/add")
-    @Produces("application/json")
-    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
     public Response addUser( User user) {
         if(user == null) {
@@ -102,8 +101,8 @@ public class UserEndpoint {
 
     // UPDATE
     @PUT
-    @Path("/update/{login}")
-    @Produces("application/json")
+    @Path("/{login}/update")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
     public Response updateUser( @PathParam("login") String login, User user, @NotNull @NotEmpty @HeaderParam("If-Match") String etag) {
         if(login == null || login.trim().equals("")) {
@@ -131,8 +130,8 @@ public class UserEndpoint {
     }
 
     @PUT
-    @Path("/activate/{login}")
-    @Produces("application/json")
+    @Path("/{login}/activate")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
     public Response activateUser(@PathParam("login") String login) {
         if(login == null || login.trim().equals("")) {
@@ -149,8 +148,8 @@ public class UserEndpoint {
     }
 
     @PUT
-    @Path("/deactivate/{login}")
-    @Produces("application/json")
+    @Path("/{login}/deactivate")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"Admin"})
     public Response deactivateUser(@PathParam("login") String login) {
         if(login == null || login.trim().equals("")) {

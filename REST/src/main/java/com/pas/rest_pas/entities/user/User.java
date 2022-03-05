@@ -2,7 +2,7 @@ package com.pas.rest_pas.entities.user;
 
 import com.nimbusds.jose.shaded.json.annotate.JsonIgnore;
 import com.pas.rest_pas.entities.Entity;
-import com.pas.rest_pas.entities.Signable;
+import com.pas.rest_pas.entities.Singable;
 import com.pas.rest_pas.entities.user.access_levels.AccessLevel;
 
 import javax.json.bind.annotation.*;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @JsonbNillable(value = true)
-public class User extends Entity implements Signable, Serializable {
+public class User extends Entity implements Singable, Serializable {
 
 
     @JsonbProperty
@@ -137,7 +137,7 @@ public class User extends Entity implements Signable, Serializable {
 
     @JsonbTransient
     @Override
-    public String getSignablePayload() {
+    public String getSingablePayload() {
         return login + getId().toString();
     }
 }

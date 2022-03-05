@@ -19,11 +19,12 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class CostumeManager {
+public class CostumeManager extends AbstractManager {
 
     private CostumeRepository costumeRepository;
 
     public CostumeManager() {
+        super();
     }
 
     @Inject

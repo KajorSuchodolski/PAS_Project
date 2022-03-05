@@ -1,7 +1,6 @@
 package com.pas.pas_mvc.rest_clients;
 
 import com.pas.pas_mvc.model.costume.CostumeDTO;
-import org.apache.commons.logging.Log;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -15,23 +14,23 @@ import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.util.List;
 
-import static javax.ws.rs.core.Response.ok;
-
 @SessionScoped
 public class CostumeRestClient implements Serializable {
-
-
-
-    private Client client = ClientBuilder.newClient();
-    private WebTarget target = client.target("https://localhost:8181/REST-1.0-SNAPSHOT/rest/costumes/");
 
 
     @Inject
     private LoginRestClient loginRestClient;
 
+    private WebTarget getTarget() {
+        Client client = ClientBuilder.newClient();
+        return client.target("https://localhost:8181/REST-1.0-SNAPSHOT/costumes");
+    }
+
+
+
     // READ
     public List<CostumeDTO> getAllCostumes() {
-        return target.path("all")
+        return getTarget()
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(new GenericType<>(){});
@@ -39,7 +38,7 @@ public class CostumeRestClient implements Serializable {
 
     // CREATE
     public void postCostume(CostumeDTO newCostume) {
-        target.path("add")
+        getTarget()
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .post(Entity.json(newCostume));
@@ -47,30 +46,27 @@ public class CostumeRestClient implements Serializable {
 
     // DELETE
     public void deleteCostume(String idDeletion) {
-        System.out.println("Wywolano delete costume");
-        Response response = target.path("delete/" + idDeletion)
+        getTarget().path(idDeletion)
                 .request()
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .delete();
-        System.out.println("odpowiedz to: " + response);
     }
 
     // UPDATE
 
     public void updateCostume(CostumeDTO newCostume) {
-        System.out.println("Wywolano update costume");
-        Response res =  ok().entity(target.path("update/" + newCostume.getId().toString())
+        getTarget().path(newCostume.getId().toString())
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .header("If-Match", newCostume.getEtag())
-                .put(Entity.json(newCostume))).build();
-        System.out.println("Odpowiedz to: " + res);
+                .put(Entity.json(newCostume));
     }
 
     // READ - SEARCH BY NAME
 
-    public List<CostumeDTO> searchCostumeByName(String searchName) {
-        return target.path("searchByName/" + searchName)
+    public List<CostumeDTO> searchCostumeByName(String name) {
+        return getTarget().path("search-by-name")
+                .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(new GenericType<>(){});
@@ -78,36 +74,28 @@ public class CostumeRestClient implements Serializable {
 
     // READ - GET BY ID (COSTUME)
 
-    public CostumeDTO getCostumeById(String getId) {
-        Response response = target.path("getById/" + getId)
+    public CostumeDTO getCostumeById(String id) {
+        Response response = getTarget().path(id)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get();
        String etag = (String) response.getHeaders().getFirst("Etag");
 
-       CostumeDTO costumeDTO = target.path("getById/" + getId)
+       CostumeDTO costumeDTO = getTarget().path(id)
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(CostumeDTO.class);
        costumeDTO.setEtag(etag);
-        System.out.println(costumeDTO);
        return costumeDTO;
     }
 
     // READ - GET ALL AVAILABLE
 
     public List<CostumeDTO> getAllAvailableCostumes() {
-        return target.path("getAllAvailable")
+        return getTarget().path("all-available")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + loginRestClient.getToken())
                 .get(new GenericType<>(){});
     }
 
-    public LoginRestClient getLoginRestClient() {
-        return loginRestClient;
-    }
-
-    public void setLoginRestClient( LoginRestClient loginRestClient ) {
-        this.loginRestClient = loginRestClient;
-    }
 }

@@ -19,7 +19,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,13 +28,11 @@ public class LoginRestClient implements Serializable {
     @Inject
     private UserStatusBean userStatusBean;
 
-    @Inject
-    private HttpServletRequest request;
 
 
     private WebTarget getTarget() {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("https://localhost:8181/REST-1.0-SNAPSHOT/rest");
+        WebTarget target = client.target("https://localhost:8181/REST-1.0-SNAPSHOT");
         return target.path("authenticate");
     }
 
@@ -43,7 +40,6 @@ public class LoginRestClient implements Serializable {
 
     public CredentialValidationResult getLogin(String login, String password) throws Exception {
 
-        System.out.println("OwO");
         Response response = getTarget().request().post(Entity.json(Json.createObjectBuilder().add("login", login)
                 .add("password", password).build()));
         if (response.getStatus() == 202) {
@@ -83,7 +79,7 @@ public class LoginRestClient implements Serializable {
     }
 
     public void changePassword(String newPassword) throws ForbiddenException {
-        getTarget().path(userStatusBean.getLogin() + "/changePassword")
+        getTarget().path(userStatusBean.getLogin() + "/change-password")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .post(Entity.json(Json.createObjectBuilder()

@@ -1,12 +1,12 @@
 package com.pas.rest_pas.entities.costume;
 
 import com.pas.rest_pas.entities.Entity;
-import com.pas.rest_pas.entities.Signable;
+import com.pas.rest_pas.entities.Singable;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class Costume extends Entity implements Signable {
+public class Costume extends Entity implements Singable {
 
     private boolean isRented;
     private CostumeSize costumeSize;
@@ -96,7 +96,7 @@ public class Costume extends Entity implements Signable {
     }
 
     @Override
-    public String getSignablePayload() {
+    public String getSingablePayload() {
         return getId().toString();
     }
 }

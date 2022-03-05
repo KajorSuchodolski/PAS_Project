@@ -1,7 +1,6 @@
 package com.pas.pas_mvc.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.nimbusds.jwt.SignedJWT;
 import com.pas.pas_mvc.beans.login.UserStatusBean;
 import com.pas.pas_mvc.rest_clients.LoginRestClient;
 import org.glassfish.soteria.SecurityContextImpl;
